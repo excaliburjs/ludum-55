@@ -1,8 +1,6 @@
-# GAME_JAM_NAME GAME_JAM_NUMBER
+# Ludum Dare 55
 
-Replace the relevant strings in the [String Variables](/string-vars.md) file with the relevant information.
-
-Visit https://excaliburjs.com/REPO_NAME/ to play!
+Visit https://excaliburjs.com/ludum-55/ to play!
 
 ### Perquisites
 
@@ -15,9 +13,9 @@ Updating your local copy with `git pull -r` to rebase your local commits on top 
 
 1. Clone the repo
 
-        git clone https://github.com/excaliburjs/REPO_NAME.git
+        git clone https://github.com/excaliburjs/ludum-55.git
 
-2. Navigate into the root directory `REPO_NAME` in your favorite command line tool
+2. Navigate into the root directory `ludum-55` in your favorite command line tool
 
 3. Run the install to download the tools:
 

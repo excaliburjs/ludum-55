@@ -6,7 +6,7 @@ These strings should be replaced in all files (except this one) with the appropr
   - The name of the repository (usually formatted like `ludum-50`)
 - GAME_TITLE
   - The title of this game
-- GAME_JAME_NAME
+- GAME_JAM_NAME
   - The name of the game jam (e.g. "Ludum Dare, "Global Game Jam", etc.)
 - GAME_JAM_NUMBER
   - The (optional) identifying number of the game jam (e.g. the "42" in "Ludum Dare 42" or the year "2024" in "Global Game Jam 2024")
