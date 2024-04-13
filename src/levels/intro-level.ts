@@ -1,11 +1,15 @@
-import { Scene, vec } from "excalibur";
+import { Engine, IsometricEntityComponent, Scene, vec, PointerEvent } from "excalibur";
 import { PuzzleGrid } from "../puzzle-grid";
 import { Unit } from "../unit";
+import { Inventory } from "../inventory";
 
 
-export class IntroLevel extends Scene {
-    puzzleGrid: PuzzleGrid;
+export class Level extends Scene {
     // TODO take puzzle config and generate grid
+    puzzleGrid: PuzzleGrid;
+
+    currentSelection: Unit | null = null;
+    inventory!: Inventory;
 
     constructor() {
         super();
@@ -23,5 +27,23 @@ export class IntroLevel extends Scene {
 
         this.camera.zoom = 2;
         this.camera.pos = this.puzzleGrid.iso.transform.pos;
+    }
+
+    moveSelection = (evt: PointerEvent) => {
+        if (this.currentSelection) {
+            this.currentSelection.pos = evt.worldPos;
+        }
+    }
+
+    onInitialize(engine: Engine<any>): void {
+        this.inventory = document.getElementsByTagName('app-inventory')[0]! as Inventory;
+        this.inventory.setLevel(this);
+        this.input.pointers.on('move', this.moveSelection)
+    }
+
+    selectUnit(unit: Unit) {
+        unit.addComponent(new IsometricEntityComponent(this.puzzleGrid.iso));
+        this.currentSelection = unit;
+        this.add(unit);
     }
 }

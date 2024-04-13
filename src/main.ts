@@ -2,7 +2,7 @@ import { DisplayMode, Engine, FadeInOut } from "excalibur";
 import { loader } from "./resources";
 import { SoundManager } from "./sound-manager";
 import { loadPreferences } from "./preferences";
-import { IntroLevel } from "./levels/intro-level";
+import { Level } from "./levels/intro-level";
 
 import './inventory';
 
@@ -14,7 +14,7 @@ const game = new Engine({
     pixelArt: true,
     pixelRatio: 2,
     scenes: {
-        'introLevel': IntroLevel
+        'introLevel': Level
     }
 });
 

@@ -2,6 +2,9 @@ import { LitElement, html, css, PropertyValueMap } from 'lit';
 import { customElement, property } from 'lit/decorators.js'
 
 import monsterSheetPng from './images/monsters.png';
+import { Level } from './levels/intro-level';
+import { Unit, UnitType } from './unit';
+import { vec } from 'excalibur';
 
 @customElement('app-inventory')
 export class Inventory extends LitElement {
@@ -66,19 +69,27 @@ export class Inventory extends LitElement {
             }
         `
     ];
+    level!: Level;
 
     constructor() {
         super();
     }
 
-    setPosition() {
-
+    setLevel(level: Level) {
+        this.level = level;
     }
     
     override firstUpdated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
         
-        const container = this.renderRoot.querySelector('.container');
+        const container = this.renderRoot.querySelector('.container') as HTMLElement;
         container.style.setProperty('--monster-image-path', `url(${monsterSheetPng})`);
+    }
+
+    onSelection = (type: UnitType) => {
+        return () => {
+            const unit = new Unit({type});
+            this.level.selectUnit(unit);
+        }
     }
 
     render() {
@@ -86,11 +97,11 @@ export class Inventory extends LitElement {
         <div class="container">
             <h2>Inventory</h2>
             <ul>
-                <li><button><div class="unit-image dragon"></div>Dragon:9</button></li>
-                <li><button><div class="unit-image orc"></div>Orc:5</button></li>
-                <li><button><div class="unit-image goblin"></div>Goblin:3</button></li>
-                <li><button><div class="unit-image kobold"></div>Kobold:2</button></li>
-                <li><button><div class="unit-image rat"></div>Rat:1</button></li>
+                <li><button @click=${this.onSelection('dragon')}><div class="unit-image dragon"></div>Dragon:9</button></li>
+                <li><button @click=${this.onSelection('orc')}><div class="unit-image orc"></div>Orc:5</button></li>
+                <li><button @click=${this.onSelection('goblin')}><div class="unit-image goblin"></div>Goblin:3</button></li>
+                <li><button @click=${this.onSelection('kobold')}><div class="unit-image kobold"></div>Kobold:2</button></li>
+                <li><button @click=${this.onSelection('rat')}><div class="unit-image rat"></div>Rat:1</button></li>
             </ul>
         </div>`;
     }
