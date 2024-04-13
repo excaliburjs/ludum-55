@@ -2,7 +2,7 @@ import { DisplayMode, Engine, FadeInOut } from "excalibur";
 import { loader } from "./resources";
 import { SoundManager } from "./sound-manager";
 import { loadPreferences } from "./preferences";
-import { Level } from "./levels/intro-level";
+import { Level } from "./levels/main-level";
 
 import './inventory';
 

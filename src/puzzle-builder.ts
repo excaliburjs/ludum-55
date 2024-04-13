@@ -1,7 +1,7 @@
 import { vec } from "excalibur";
 import { PuzzleGrid } from "./puzzle-grid";
 import { Unit, UnitNumberToUnitType } from "./unit";
-import { Level } from "./levels/intro-level";
+import { Level } from "./levels/main-level";
 import Config from "./config";
 
 

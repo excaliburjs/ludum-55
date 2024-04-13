@@ -2,7 +2,7 @@ import { LitElement, html, css, PropertyValueMap } from 'lit';
 import { customElement, property } from 'lit/decorators.js'
 
 import monsterSheetPng from './images/monsters.png';
-import { Level } from './levels/intro-level';
+import { Level } from './levels/main-level';
 import { Unit, UnitType } from './unit';
 
 export type InventoryConfig = Record<UnitType, number>;

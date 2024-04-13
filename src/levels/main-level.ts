@@ -6,9 +6,7 @@ import { buildPuzzle } from "../puzzle-builder";
 
 
 export class Level extends Scene {
-    // TODO take puzzle config and generate grid
     puzzleGrid: PuzzleGrid;
-
     currentSelection: Unit | null = null;
     inventory!: Inventory;
     currentSelectedCoordinate: { x: number; y: number; } = { x: 0, y: 0 };
