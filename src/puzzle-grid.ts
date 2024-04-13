@@ -112,6 +112,15 @@ export class PuzzleGrid {
             this.hideHighlight();
         }
     }
+    showHighlightByCoordinate(x: number, y: number) {
+        const tile = this.iso.getTile(x, y);
+        if (tile) {
+            this.highlight.graphics.visible = true;
+            this.highlight.pos = tile.pos.add(vec(0, 32));
+        } else {
+            this.hideHighlight();
+        }
+    }
 
     validTile(pos: Vector) {
         const tile = this.iso.getTileByPoint(pos.add(vec(0, 32)));
