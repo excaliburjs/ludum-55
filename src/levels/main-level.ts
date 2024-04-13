@@ -39,6 +39,7 @@ export class Level extends Scene {
                     this.currentSelection = null;
                 } else {
                     const previousUnit = this.puzzleGrid.getUnit(tileCoord.x, tileCoord.y)!;
+                    if(previousUnit.config.fixed){ return; }
                     this.puzzleGrid.clearCell(tileCoord.x, tileCoord.y);
                     this.puzzleGrid.addUnit(this.currentSelection, tileCoord.x, tileCoord.y);
                     const counts = this.inventory.getInventoryConfig();
@@ -50,7 +51,6 @@ export class Level extends Scene {
         }
         if(this.puzzleGrid.checkSolved()) { 
             const nextLevel = this.level + 1;
-            console.log(nextLevel)
             const sceneKey = `level ${nextLevel}`;
             this.engine.addScene(sceneKey, new Level(nextLevel));
             this.engine.goToScene(sceneKey, { 
