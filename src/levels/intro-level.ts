@@ -34,10 +34,17 @@ export class Level extends Scene {
                 const success = this.puzzleGrid.addUnit(this.currentSelection, tileCoord.x, tileCoord.y);
                 if (success) {
                     this.currentSelection = null;
+                } else {
+                    const previousUnit = this.puzzleGrid.getUnit(tileCoord.x, tileCoord.y)!;
+                    this.puzzleGrid.clearCell(tileCoord.x, tileCoord.y);
+                    this.puzzleGrid.addUnit(this.currentSelection, tileCoord.x, tileCoord.y);
+                    const counts = this.inventory.getInventoryConfig();
+                    counts[previousUnit.config.type]++;
+                    this.inventory.setInventoryConfig(counts);
+                    this.currentSelection = null;
                 }
             }
         }
-        this.cancelSelection()
     }
 
     onInitialize(engine: Engine<any>): void {

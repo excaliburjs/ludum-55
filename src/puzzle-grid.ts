@@ -130,6 +130,28 @@ export class PuzzleGrid {
         this.highlight.graphics.visible = false;
     }
 
+    /**
+     * Get the unit at a current cell
+     * @param x 
+     * @param y 
+     * @returns Unit or null
+     */
+    getUnit(x: number, y: number): Unit | null {
+        return this.grid[x + y * this.dimension];
+    }
+
+    /**
+     * Clears the current cell of any units
+     * @param x 
+     * @param y 
+     */
+    clearCell(x: number, y: number): void {
+        let unit = this.grid[x + y * this.dimension];
+        if(unit) {
+            unit.kill();
+        }
+        this.grid[x + y * this.dimension] = null;
+    }
 
     /**
      * Adds a unit to a grid cell, returns true is place, false if unsuccessful and currently occupied
@@ -149,6 +171,10 @@ export class PuzzleGrid {
         return false;
     }
 
+    /**
+     * 
+     * @returns whether or not the board state is solved
+     */
     checkSolved(): boolean {
         for (let x = 0; x < this.dimension; x++) {
             let colSum = 0;
