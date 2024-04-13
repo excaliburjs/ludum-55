@@ -7,6 +7,7 @@ export interface UnitConfig {
     type: UnitType;
     value: number;
     graphic: Graphic;
+    fixed?: boolean;
 }
 
 export const UnitsConfig: Record<UnitType, UnitConfig> = {
