@@ -12,7 +12,7 @@ export class Inventory extends LitElement {
                 --sprite-width: 32px;
             }
             :host {
-                font-family: san-serif;
+                font-family: sans-serif;
             }
 
             .container {
@@ -20,7 +20,6 @@ export class Inventory extends LitElement {
                 background-color: black;
                 color: white;
                 position: absolute;
-                font-family: san-serif;
                 right: 0;
                 top: 0;
                 padding: 1rem;
