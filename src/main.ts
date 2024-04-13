@@ -14,11 +14,12 @@ const game = new Engine({
     pixelArt: true,
     pixelRatio: 2,
     scenes: {
-        'introLevel': Level
+        'introLevel': new Level(0)
     }
 });
 
 game.start('introLevel', { inTransition: new FadeInOut({direction: 'in',duration: 200 }), loader});
+
 
 loadPreferences();
 SoundManager.init();

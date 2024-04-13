@@ -13,9 +13,9 @@ export class Level extends Scene {
     inventory!: Inventory;
     currentSelectedCoordinate: { x: number; y: number; } = { x: 0, y: 0 };
 
-    constructor() {
+    constructor(private level: number) {
         super();
-        this.puzzleGrid = buildPuzzle(0, this);
+        this.puzzleGrid = buildPuzzle(level ?? 0, this);
 
         this.camera.zoom = 2;
         this.camera.pos = this.puzzleGrid.iso.transform.pos;
@@ -49,6 +49,13 @@ export class Level extends Scene {
                     this.currentSelection = null;
                 }
             }
+        }
+        if(this.puzzleGrid.checkSolved()) { 
+            const nextLevel = this.level + 1;
+            console.log(nextLevel)
+            const sceneKey = `level ${nextLevel}`;
+            this.engine.addScene(sceneKey, new Level(nextLevel as number));
+            this.engine.goToScene(sceneKey);
         }
     }
 
