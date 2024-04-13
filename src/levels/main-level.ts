@@ -16,7 +16,7 @@ export class Level extends Scene {
         this.puzzleGrid = buildPuzzle(level, this);
 
         this.camera.zoom = 2;
-        this.camera.pos = this.puzzleGrid.iso.transform.pos;
+        this.camera.pos = this.puzzleGrid.iso.transform.pos.add(vec(0, 100));
     }
 
     moveSelection = (evt: PointerEvent) => {

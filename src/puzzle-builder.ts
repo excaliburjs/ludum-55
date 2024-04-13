@@ -6,11 +6,15 @@ import { Inventory, InventoryConfig } from "./inventory";
 import { Level } from "./levels/main-level";
 
 
+function canonicalValue(val: string | number) {
+    return typeof val === 'string' ? 0 : val;
+}
+
 function calculatePuzzleGoals(puzzleIndex: number) {
     const puzzleArray = (Config.puzzles as any)[puzzleIndex].grid;
 
-    const solutionRows: number[] = puzzleArray.map((row: number[]) => row.reduce((a, b) => a + b));
-    const solutionColumns: number[] = puzzleArray.reduce((a: number[], b: number[]) => a.map((x, i) => x + b[i]));
+    const solutionRows: number[] = puzzleArray.map((row: number[]) => row.reduce((a, b) => canonicalValue(a) + canonicalValue(b)));
+    const solutionColumns: number[] = puzzleArray.reduce((a: number[], b: number[]) => a.map((x, i) => x + canonicalValue(b[i])));
 
     return {
         columns: solutionColumns,
@@ -33,8 +37,22 @@ function populatePuzzle(puzzleIndex: number, puzzleGrid: PuzzleGrid) {
                 } else {
                     console.error(`No unit type matches the number ${cellValue}`);
                 }
-            } else if (cellValue === 0) {
+            } else if (cellValue === 0 || typeof cellValue === 'string') {
                 // TODO add to list of empty spaces to place
+                switch(cellValue) {
+                    case 'w': {
+                        puzzleGrid.addUnit(new Unit({type: 'wall'}), j, i);
+                        break;
+                    }
+                    case 'p': {
+                        puzzleGrid.addUnit(new Unit({type: 'pit'}), j, i);
+                        break;
+                    }
+                    case 'r': {
+                        puzzleGrid.addUnit(new Unit({type: 'rubble'}), j, i);
+                        break;
+                    }
+                }
             }
         }
     }

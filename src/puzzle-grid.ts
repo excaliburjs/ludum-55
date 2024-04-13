@@ -16,6 +16,7 @@ export class PuzzleGrid {
 
     private grassTile: Sprite;
     private highlightSprite: Sprite;
+    private unplaceableHighlightSprite: Sprite;
     public iso: IsometricMap;
 
     public goals: {
@@ -46,6 +47,7 @@ export class PuzzleGrid {
 
         this.grassTile = TilesSpriteSheet.getSprite(0, 0);
         this.highlightSprite = TilesSpriteSheet.getSprite(1, 0);
+        this.unplaceableHighlightSprite = TilesSpriteSheet.getSprite(2, 0);
         this.highlight = new Actor({
             width: 64,
             height: 64,
@@ -103,9 +105,18 @@ export class PuzzleGrid {
         }
     }
 
+    isFixed(x: number, y: number) {
+        return !!this.grid[x + y * this.dimension]?.config.fixed;
+    }
+
     showHighlight(pos: Vector) {
         const tile = this.iso.getTileByPoint(pos.add(vec(0, 32)));
         if (tile) {
+            if (this.isFixed(tile.x, tile.y)) {
+                this.highlight.graphics.use(this.unplaceableHighlightSprite);
+            } else {
+                this.highlight.graphics.use(this.highlightSprite);
+            }
             this.highlight.graphics.visible = true;
             this.highlight.pos = tile.pos.add(vec(0, 32));
         } else {
@@ -115,6 +126,11 @@ export class PuzzleGrid {
     showHighlightByCoordinate(x: number, y: number) {
         const tile = this.iso.getTile(x, y);
         if (tile) {
+            if (this.isFixed(tile.x, tile.y)) {
+                this.highlight.graphics.use(this.unplaceableHighlightSprite);
+            } else {
+                this.highlight.graphics.use(this.highlightSprite);
+            }
             this.highlight.graphics.visible = true;
             this.highlight.pos = tile.pos.add(vec(0, 32));
         } else {
@@ -170,6 +186,17 @@ export class PuzzleGrid {
      */
     addUnit(unit: Unit, x: number, y: number): boolean {
         const tile = this.iso.getTile(x, y);
+
+        if (tile && this.grid[x + y * this.dimension]?.config.fixed) {
+            return false;
+        }
+
+        // TODO kind of bad but certain units also influence the tile below
+        if (tile && unit.config.type === 'pit') {
+            tile.clearGraphics();
+            tile.addGraphic(TilesSpriteSheet.getSprite(5, 0))
+        }
+
         if (tile && !this.grid[x + y * this.dimension]) {
             unit.pos = tile.pos;
             unit.addComponent(new IsometricEntityComponent(this.iso));
