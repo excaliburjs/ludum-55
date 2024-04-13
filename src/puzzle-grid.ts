@@ -198,7 +198,11 @@ export class PuzzleGrid {
         }
 
         if (tile && !this.grid[x + y * this.dimension]) {
-            unit.pos = tile.pos;
+            if (unit.config.value !== 0) {
+                unit.pos = tile.pos.add(vec(0, -8));
+            } else {
+                unit.pos = tile.pos;
+            }
             unit.addComponent(new IsometricEntityComponent(this.iso));
             this.scene.add(unit);
             this.grid[x + y * this.dimension] = unit;

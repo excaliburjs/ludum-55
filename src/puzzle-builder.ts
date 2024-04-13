@@ -66,14 +66,12 @@ export function calculateInventory(puzzleIndex: number, level: Level): Inventory
         let unit = ((UnitsConfig as any)[r] as UnitConfig);
         reverseMap[unit.value] = r as UnitType;
     }
-    let counts: Record<UnitType, number> = {
+    let counts: Record<string, number> = {
         dragon: 0,
         orc: 0,
         goblin: 0,
         kobold: 0,
-        rat: 0,
-        knight: 0,
-        archer: 0
+        rat: 0
     };
 
     for(let i = 0; i < puzzleArray.length; i++){
@@ -83,7 +81,7 @@ export function calculateInventory(puzzleIndex: number, level: Level): Inventory
             ] ++;
         }
     }
-    return counts;
+    return counts as InventoryConfig;
 }
 
 export function buildPuzzle(puzzleIndex: number, level: Level): PuzzleGrid {
