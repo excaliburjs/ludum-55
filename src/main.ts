@@ -1,21 +1,22 @@
-import { DisplayMode, Engine } from "excalibur";
+import { DisplayMode, Engine, FadeInOut } from "excalibur";
 import { loader } from "./resources";
-import { Player } from "./player";
 import { SoundManager } from "./sound-manager";
 import { loadPreferences } from "./preferences";
+import { IntroLevel } from "./levels/intro-level";
 
 const game = new Engine({
     width: 800,
     height: 600,
     canvasElementId: 'game',
     displayMode: DisplayMode.FitScreen,
-    pixelArt: true
+    pixelArt: true,
+    pixelRatio: 2,
+    scenes: {
+        'introLevel': IntroLevel
+    }
 });
 
-const player = new Player(game.screen.center);
-game.add(player);
-
-game.start(loader);
+game.start('introLevel', { inTransition: new FadeInOut({direction: 'in',duration: 200 }), loader});
 
 loadPreferences();
 SoundManager.init();
