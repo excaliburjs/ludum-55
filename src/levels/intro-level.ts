@@ -37,11 +37,21 @@ export class Level extends Scene {
                 }
             }
         }
+        this.cancelSelection()
     }
 
     onInitialize(engine: Engine<any>): void {
         this.inventory = document.getElementsByTagName('app-inventory')[0]! as Inventory;
         this.inventory.setLevel(this);
+        this.inventory.setInventoryConfig({
+            dragon: 2,
+            orc: 4,
+            goblin: 2,
+            kobold: 1,
+            rat: 1,
+            knight: 0,
+            archer: 0
+        })
         this.input.pointers.on('move', this.moveSelection);
         this.input.pointers.on('down', this.placeSelection);
     }
@@ -49,9 +59,21 @@ export class Level extends Scene {
     selectUnit(unit: Unit) {
         if (this.currentSelection) {
             this.remove(this.currentSelection);
+            this.currentSelection = null;
         }
         unit.addComponent(new IsometricEntityComponent(this.puzzleGrid.iso));
         this.currentSelection = unit;
         this.add(unit);
+    }
+
+    cancelSelection() {
+        if (this.currentSelection) {
+            this.remove(this.currentSelection);
+            const type = this.currentSelection.config.type;
+            const counts = this.inventory.getInventoryConfig();
+            counts[type]++;
+            this.inventory.setInventoryConfig(counts);
+            this.currentSelection = null;
+        }
     }
 }

@@ -1,13 +1,24 @@
 import { LitElement, html, css, PropertyValueMap } from 'lit';
 import { customElement, property } from 'lit/decorators.js'
+import {repeat} from 'lit/directives/repeat.js';
 
 import monsterSheetPng from './images/monsters.png';
 import { Level } from './levels/intro-level';
 import { Unit, UnitType } from './unit';
-import { vec } from 'excalibur';
+
+export type InventoryConfig = Record<UnitType, number>;
 
 @customElement('app-inventory')
 export class Inventory extends LitElement {
+    public counts: Record<UnitType, number> = {
+        dragon: 0,
+        orc: 0,
+        goblin: 0,
+        kobold: 0,
+        rat: 0,
+        knight: 0,
+        archer: 0
+    };
     static styles = [
         css`
             :root {
@@ -41,6 +52,10 @@ export class Inventory extends LitElement {
                 outline: white solid 2px;
             }
 
+            span {
+                margin-right: auto;
+            }
+
             li,button {
                 display: flex;
                 flex-grow: 1;
@@ -50,6 +65,10 @@ export class Inventory extends LitElement {
                 background-image: var(--monster-image-path);
                 width: 32px;
                 height: 32px;
+            }
+
+            .unit-image:not(:last-child) {
+                /* margin-right: -20px; */
             }
 
             .dragon {
@@ -75,20 +94,35 @@ export class Inventory extends LitElement {
         super();
     }
 
+    setInventoryConfig(config: InventoryConfig) {
+        this.counts = config;
+        this.requestUpdate();
+    }
+
+    getInventoryConfig() {
+        return this.counts;
+    }
+
     setLevel(level: Level) {
         this.level = level;
     }
     
     override firstUpdated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
-        
         const container = this.renderRoot.querySelector('.container') as HTMLElement;
         container.style.setProperty('--monster-image-path', `url(${monsterSheetPng})`);
     }
 
     onSelection = (type: UnitType) => {
         return () => {
-            const unit = new Unit({type});
-            this.level.selectUnit(unit);
+            if (this.counts[type] > 0) {
+                const unit = new Unit({type});
+                if (this.level.currentSelection) {
+                    this.level.cancelSelection();
+                }
+                this.level.selectUnit(unit);
+                this.counts[type]--;
+                this.requestUpdate();
+            }
         }
     }
 
@@ -97,11 +131,16 @@ export class Inventory extends LitElement {
         <div class="container">
             <h2>Inventory</h2>
             <ul>
-                <li><button @click=${this.onSelection('dragon')}><div class="unit-image dragon"></div>Dragon:9</button></li>
-                <li><button @click=${this.onSelection('orc')}><div class="unit-image orc"></div>Orc:5</button></li>
-                <li><button @click=${this.onSelection('goblin')}><div class="unit-image goblin"></div>Goblin:3</button></li>
-                <li><button @click=${this.onSelection('kobold')}><div class="unit-image kobold"></div>Kobold:2</button></li>
-                <li><button @click=${this.onSelection('rat')}><div class="unit-image rat"></div>Rat:1</button></li>
+                ${repeat(Object.entries(this.counts), ([type, _]) => type, ([type, count]) => count > 0 ? html`
+                    <li>
+                        <button @click=${this.onSelection(type as UnitType)}>
+                            <span>${type}</span>
+                            ${new Array(count).fill(null).map(() => 
+                                html`<div class="unit-image ${type}"></div>`
+                            )}
+                        </button>
+                    </li>
+                ` : ``)}
             </ul>
         </div>`;
     }
