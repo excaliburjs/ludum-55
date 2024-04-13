@@ -1,6 +1,5 @@
 import { LitElement, html, css, PropertyValueMap } from 'lit';
 import { customElement, property } from 'lit/decorators.js'
-import {repeat} from 'lit/directives/repeat.js';
 
 import monsterSheetPng from './images/monsters.png';
 import { Level } from './levels/intro-level';
@@ -131,7 +130,7 @@ export class Inventory extends LitElement {
         <div class="container">
             <h2>Inventory</h2>
             <ul>
-                ${repeat(Object.entries(this.counts), ([type, _]) => type, ([type, count]) => count > 0 ? html`
+                ${Object.entries(this.counts).map(([type, count]) => count > 0 ? html`
                     <li>
                         <button @click=${this.onSelection(type as UnitType)}>
                             <span>${type}</span>
@@ -140,7 +139,7 @@ export class Inventory extends LitElement {
                             )}
                         </button>
                     </li>
-                ` : ``)}
+                ` : html``)}
             </ul>
         </div>`;
     }
