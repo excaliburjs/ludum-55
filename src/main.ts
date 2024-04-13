@@ -18,7 +18,7 @@ const game = new Engine({
     }
 });
 
-game.start('introLevel', { inTransition: new FadeInOut({direction: 'in',duration: 200 }), loader});
+game.start('introLevel', { inTransition: new FadeInOut({direction: 'in', duration: 2000 }), loader});
 
 
 loadPreferences();
