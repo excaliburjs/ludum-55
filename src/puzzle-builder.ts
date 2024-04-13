@@ -14,7 +14,7 @@ function calculatePuzzleGoals(puzzleIndex: number) {
     const puzzleArray = (Config.puzzles as any)[puzzleIndex].grid;
 
     const solutionRows: number[] = puzzleArray.map((row: number[]) => row.reduce((a, b) => canonicalValue(a) + canonicalValue(b)));
-    const solutionColumns: number[] = puzzleArray.reduce((a: number[], b: number[]) => a.map((x, i) => x + canonicalValue(b[i])));
+    const solutionColumns: number[] = puzzleArray.reduce((a: number[], b: number[]) => a.map((x, i) => canonicalValue(x) + canonicalValue(b[i])));
 
     return {
         columns: solutionColumns,
