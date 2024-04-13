@@ -1,5 +1,5 @@
-import { Font, FontUnit, IsometricEntityComponent, IsometricMap, Label, Scene, Sprite, Vector, vec } from "excalibur";
-import { Resources } from "./resources";
+import { Actor, Font, FontUnit, IsometricEntityComponent, IsometricMap, Label, Scene, Sprite, Vector, vec } from "excalibur";
+import { Resources, TilesSpriteSheet } from "./resources";
 import { Unit } from "./unit";
 
 
@@ -15,6 +15,7 @@ export interface PuzzleGridOptions {
 export class PuzzleGrid {
 
     private grassTile: Sprite;
+    private highlightSprite: Sprite;
     public iso: IsometricMap;
 
     public goals: {
@@ -29,7 +30,9 @@ export class PuzzleGrid {
         family: 'sans-serif',
         size: 24,
         unit: FontUnit.Px
-    })
+    });
+
+    public highlight: Actor;
 
     constructor(private scene: Scene, options: PuzzleGridOptions) {
         const {dimension, pos, goals} = options;
@@ -40,6 +43,18 @@ export class PuzzleGrid {
             tileWidth: 64,
             tileHeight: 64 / 2 
         });
+
+        this.grassTile = TilesSpriteSheet.getSprite(0, 0);
+        this.highlightSprite = TilesSpriteSheet.getSprite(1, 0);
+        this.highlight = new Actor({
+            width: 64,
+            height: 64,
+            anchor: vec(0.5, 1)
+        });
+        this.highlight.addComponent(new IsometricEntityComponent(this.iso));
+        this.highlight.graphics.use(this.highlightSprite);
+        this.highlight.graphics.visible = false;
+        scene.add(this.highlight);
 
         if (goals.columns.length !== dimension) {
             throw new Error(`Goals for columns length [${goals.columns.length}] need to match dimension [${dimension}]`);
@@ -53,7 +68,7 @@ export class PuzzleGrid {
         this.dimension = dimension;
         this.grid = new Array(dimension * dimension).fill(null);
 
-        this.grassTile = Resources.GrassTile.toSprite();
+        
 
         for (let tile of this.iso.tiles) {
             tile.addGraphic(this.grassTile);
@@ -86,6 +101,20 @@ export class PuzzleGrid {
                 scene.add(label);
             }
         }
+    }
+
+    showHighlight(pos: Vector) {
+        const tile = this.iso.getTileByPoint(pos.add(vec(0, 32)));
+        if (tile) {
+            this.highlight.graphics.visible = true;
+            this.highlight.pos = tile.pos.add(vec(0, 32));
+        } else {
+            this.hideHighlight();
+        }
+    }
+
+    hideHighlight() {
+        this.highlight.graphics.visible = false;
     }
 
 

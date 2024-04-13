@@ -33,6 +33,7 @@ export class Level extends Scene {
         if (this.currentSelection) {
             this.currentSelection.pos = evt.worldPos;
         }
+        this.puzzleGrid.showHighlight(evt.worldPos);
     }
 
     onInitialize(engine: Engine<any>): void {

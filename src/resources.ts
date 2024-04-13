@@ -1,16 +1,26 @@
 import { ImageSource, Loader, Sound, SpriteSheet } from "excalibur";
 
 import swordPng from './images/template-sample-image-sword.png';
-import grassTilePng from './images/isometric-tiles.png';
+import tilesPng from './images/isometric-tiles.png';
 import monsterPng from './images/monsters.png';
 import projectileMp3 from './sounds/template-sample-sound-projectile.mp3';
 
 export const Resources = {
     Sword: new ImageSource(swordPng),
-    GrassTile: new ImageSource(grassTilePng),
+    TilesSheetImage: new ImageSource(tilesPng),
     MonsterSheetImage: new ImageSource(monsterPng),
     ProjectileSound: new Sound(projectileMp3)
 } as const;
+
+export const TilesSpriteSheet = SpriteSheet.fromImageSource({
+    image: Resources.TilesSheetImage,
+    grid: {
+        rows: 1,
+        columns: 2,
+        spriteHeight: 64,
+        spriteWidth: 64
+    }
+})
 
 export const MonsterSpriteSheet = SpriteSheet.fromImageSource({
     image: Resources.MonsterSheetImage,
