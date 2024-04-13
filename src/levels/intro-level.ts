@@ -15,7 +15,7 @@ export class Level extends Scene {
 
     constructor(private level: number) {
         super();
-        this.puzzleGrid = buildPuzzle(level ?? 0, this);
+        this.puzzleGrid = buildPuzzle(level, this);
 
         this.camera.zoom = 2;
         this.camera.pos = this.puzzleGrid.iso.transform.pos;
@@ -54,7 +54,7 @@ export class Level extends Scene {
             const nextLevel = this.level + 1;
             console.log(nextLevel)
             const sceneKey = `level ${nextLevel}`;
-            this.engine.addScene(sceneKey, new Level(nextLevel as number));
+            this.engine.addScene(sceneKey, new Level(nextLevel));
             this.engine.goToScene(sceneKey);
         }
     }
