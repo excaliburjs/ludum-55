@@ -11,7 +11,11 @@ export class IntroLevel extends Scene {
         super();
         this.puzzleGrid = new PuzzleGrid(this, {
             pos: vec(400, 100),
-            dimension: 3
+            dimension: 3,
+            goals: {
+                columns: [1, 2, 3],
+                rows: [1, 2, 3]
+            }
         });
 
         this.puzzleGrid.addUnit(new Unit({type: 'dragon'}), 0, 0)
