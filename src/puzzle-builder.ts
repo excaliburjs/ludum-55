@@ -17,7 +17,7 @@ function calculatePuzzleGoals(puzzleIndex: number) {
     }
 }
 
-function placeEnemies(puzzleIndex: number, puzzleGrid: PuzzleGrid) {
+function populatePuzzle(puzzleIndex: number, puzzleGrid: PuzzleGrid) {
     const puzzleArray = (Config.puzzles as any)[puzzleIndex].grid;
     console.log({puzzleArray});
 
@@ -53,10 +53,7 @@ export function buildPuzzle(puzzleIndex: number, level: Level): PuzzleGrid {
         }
     });
 
-    placeEnemies(puzzleIndex, puzzleGrid)
-    // puzzleGrid.addUnit(new Unit({type: 'dragon'}), 0, 0)
-    // puzzleGrid.addUnit(new Unit({type: 'kobold'}), 2, 0)
-
+    populatePuzzle(puzzleIndex, puzzleGrid)
 
     return puzzleGrid;
 }
