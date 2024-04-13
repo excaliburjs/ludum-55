@@ -1,8 +1,9 @@
 import { vec } from "excalibur";
 import { PuzzleGrid } from "./puzzle-grid";
-import { Unit, UnitNumberToUnitType } from "./unit";
-import { Level } from "./levels/main-level";
+import { Unit, UnitConfig, UnitsConfig, UnitType, UnitNumberToUnitType } from "./unit";
 import Config from "./config";
+import { Inventory, InventoryConfig } from "./inventory";
+import { Level } from "./levels/main-level";
 
 
 function calculatePuzzleGoals(puzzleIndex: number) {
@@ -37,6 +38,34 @@ function populatePuzzle(puzzleIndex: number, puzzleGrid: PuzzleGrid) {
             }
         }
     }
+}
+
+export function calculateInventory(puzzleIndex: number, level: Level): InventoryConfig {
+    const puzzleArray = (Config.puzzles as any)[puzzleIndex].grid;
+
+    let reverseMap: {[id:number]: UnitType} = {};
+    for(let r of Object.keys(UnitsConfig)) {
+        let unit = ((UnitsConfig as any)[r] as UnitConfig);
+        reverseMap[unit.value] = r as UnitType;
+    }
+    let counts: Record<UnitType, number> = {
+        dragon: 0,
+        orc: 0,
+        goblin: 0,
+        kobold: 0,
+        rat: 0,
+        knight: 0,
+        archer: 0
+    };
+
+    for(let i = 0; i < puzzleArray.length; i++){
+        for(let j = 0; j < puzzleArray[i].length; j++) {
+            counts[
+                reverseMap[puzzleArray[j][i]]
+            ] ++;
+        }
+    }
+    return counts;
 }
 
 export function buildPuzzle(puzzleIndex: number, level: Level): PuzzleGrid {

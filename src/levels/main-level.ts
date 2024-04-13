@@ -2,7 +2,7 @@ import { Engine, IsometricEntityComponent, Scene, vec, PointerEvent, KeyEvent, K
 import { PuzzleGrid } from "../puzzle-grid";
 import { Unit } from "../unit";
 import { Inventory } from "../inventory";
-import { buildPuzzle } from "../puzzle-builder";
+import { buildPuzzle, calculateInventory } from "../puzzle-builder";
 
 
 export class Level extends Scene {
@@ -137,15 +137,9 @@ export class Level extends Scene {
     onInitialize(engine: Engine<any>): void {
         this.inventory = document.getElementsByTagName('app-inventory')[0]! as Inventory;
         this.inventory.setLevel(this);
-        this.inventory.setInventoryConfig({
-            dragon: 2,
-            orc: 4,
-            goblin: 2,
-            kobold: 1,
-            rat: 1,
-            knight: 0,
-            archer: 0
-        })
+        let inventory = calculateInventory(this.level, this);
+        console.log(inventory);
+        this.inventory.setInventoryConfig(inventory);
         this.input.pointers.on('move', this.moveSelection);
         this.input.pointers.on('down', this.placeSelection);
         this.input.keyboard.on('press', this.keyboardDown);
