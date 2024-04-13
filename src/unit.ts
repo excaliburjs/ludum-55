@@ -47,6 +47,16 @@ export const UnitsConfig: Record<UnitType, UnitConfig> = {
     }
 }
 
+function unitNumberToUnitType(): Map<number, UnitType> {
+    let mapping = new Map<number, UnitType>();
+    for (const key in UnitsConfig) {
+        mapping.set((UnitsConfig as any)[key].value, key as UnitType )
+    }
+    return mapping;
+}
+
+export const UnitNumberToUnitType = unitNumberToUnitType();
+
 export class Unit extends Actor {
     config: UnitConfig;
     

@@ -1,15 +1,15 @@
 import { vec } from "excalibur";
 import { PuzzleGrid } from "./puzzle-grid";
-import { Unit } from "./unit";
+import { Unit, UnitNumberToUnitType } from "./unit";
 import { Level } from "./levels/intro-level";
 import Config from "./config";
 
 
 function calculatePuzzleGoals(puzzleIndex: number) {
-    const puzzleGrid = (Config.puzzles as any)[puzzleIndex].grid;
+    const puzzleArray = (Config.puzzles as any)[puzzleIndex].grid;
 
-    const solutionRows: number[] = puzzleGrid.map((row: number[]) => row.reduce((a, b) => a + b));
-    const solutionColumns: number[] = puzzleGrid.reduce((a: number[], b: number[]) => a.map((x, i) => x + b[i]));
+    const solutionRows: number[] = puzzleArray.map((row: number[]) => row.reduce((a, b) => a + b));
+    const solutionColumns: number[] = puzzleArray.reduce((a: number[], b: number[]) => a.map((x, i) => x + b[i]));
 
     return {
         columns: solutionColumns,
@@ -17,7 +17,30 @@ function calculatePuzzleGoals(puzzleIndex: number) {
     }
 }
 
+function placeEnemies(puzzleIndex: number, puzzleGrid: PuzzleGrid) {
+    const puzzleArray = (Config.puzzles as any)[puzzleIndex].grid;
+    console.log({puzzleArray});
+
+    for(let i=0; i < puzzleArray.length; i++) {
+        let row = puzzleArray[i];
+        for(let j=0; j < row.length; j++) {
+            const cellValue = row[j];
+            if (cellValue < 0) {
+                const unitType = UnitNumberToUnitType.get(cellValue);
+                if (unitType) {
+                    puzzleGrid.addUnit(new Unit({type: unitType}), j, i)
+                } else {
+                    console.error(`No unit type matches the number ${cellValue}`);
+                }
+            } else if (cellValue === 0) {
+                // TODO add to list of empty spaces to place
+            }
+        }
+    }
+}
+
 export function buildPuzzle(puzzleIndex: number, level: Level): PuzzleGrid {
+    console.log({puzzleIndex});
     const puzzleGoals = calculatePuzzleGoals(puzzleIndex);
 
     const puzzleGrid = new PuzzleGrid(level, {
@@ -30,6 +53,7 @@ export function buildPuzzle(puzzleIndex: number, level: Level): PuzzleGrid {
         }
     });
 
+    placeEnemies(puzzleIndex, puzzleGrid)
     // puzzleGrid.addUnit(new Unit({type: 'dragon'}), 0, 0)
     // puzzleGrid.addUnit(new Unit({type: 'kobold'}), 2, 0)
 
