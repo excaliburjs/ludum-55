@@ -177,18 +177,18 @@ export class PuzzleGrid {
      */
     checkSolved(): boolean {
         for (let x = 0; x < this.dimension; x++) {
-            let colSum = 0;
-            for (let y = 0; y < this.dimension; y++) {
-                colSum += this.grid[x + y * this.dimension]?.config.value ?? 0
-            }
-           if (colSum != this.goals.columns[x]) return false;
-        }
-        for (let y = 0; y < this.dimension; y++) {
             let rowSum = 0;
-            for (let x = 0; x < this.dimension; x++) {
+            for (let y = 0; y < this.dimension; y++) {
                 rowSum += this.grid[x + y * this.dimension]?.config.value ?? 0
             }
-            if (rowSum != this.goals.rows[y]) return false;
+           if (rowSum != this.goals.rows[x]) return false;
+        }
+        for (let y = 0; y < this.dimension; y++) {
+            let colSum = 0;
+            for (let x = 0; x < this.dimension; x++) {
+                colSum += this.grid[x + y * this.dimension]?.config.value ?? 0
+            }
+            if (colSum != this.goals.columns[y]) return false;
         }
         return true;
     }
