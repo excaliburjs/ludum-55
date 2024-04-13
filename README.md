@@ -31,6 +31,8 @@ Updating your local copy with `git pull -r` to rebase your local commits on top 
 
 6. Make your changes, commit directly to the 'main' branch, update your local copy with `git pull -r`, and then push to the remote repository.
 
+7. If you run into weird caching issues, run `npm run clean` to clean out the dist and the parcel cache folders.
+
 #### Debugging tools
 
 We have excalibur chrome extension https://chromewebstore.google.com/detail/excalibur-dev-tools/dinddaeielhddflijbbcmpefamfffekc
