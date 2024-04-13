@@ -36,13 +36,29 @@ export class Level extends Scene {
         this.puzzleGrid.showHighlight(evt.worldPos);
     }
 
+    placeSelection = (evt: PointerEvent) => {
+        if (this.currentSelection && this.puzzleGrid.validTile(evt.worldPos)) {
+            const tileCoord = this.puzzleGrid.getTileCoord(evt.worldPos);
+            if (tileCoord) {
+                const success = this.puzzleGrid.addUnit(this.currentSelection, tileCoord.x, tileCoord.y);
+                if (success) {
+                    this.currentSelection = null;
+                }
+            }
+        }
+    }
+
     onInitialize(engine: Engine<any>): void {
         this.inventory = document.getElementsByTagName('app-inventory')[0]! as Inventory;
         this.inventory.setLevel(this);
-        this.input.pointers.on('move', this.moveSelection)
+        this.input.pointers.on('move', this.moveSelection);
+        this.input.pointers.on('down', this.placeSelection);
     }
 
     selectUnit(unit: Unit) {
+        if (this.currentSelection) {
+            this.remove(this.currentSelection);
+        }
         unit.addComponent(new IsometricEntityComponent(this.puzzleGrid.iso));
         this.currentSelection = unit;
         this.add(unit);

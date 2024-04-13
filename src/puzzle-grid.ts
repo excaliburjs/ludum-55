@@ -113,19 +113,40 @@ export class PuzzleGrid {
         }
     }
 
+    validTile(pos: Vector) {
+        const tile = this.iso.getTileByPoint(pos.add(vec(0, 32)));
+        return !!tile;
+    }
+
+    getTileCoord(pos: Vector): {x: number, y: number} | null {
+        const tile = this.iso.getTileByPoint(pos.add(vec(0, 32)));
+        if (tile) {
+            return { x: tile.x, y: tile.y };
+        }
+        return null;
+    }
+
     hideHighlight() {
         this.highlight.graphics.visible = false;
     }
 
 
-    addUnit(unit: Unit, x: number, y: number) {
+    /**
+     * Adds a unit to a grid cell, returns true is place, false if unsuccessful and currently occupied
+     * @param unit
+     * @param x 
+     * @param y 
+     */
+    addUnit(unit: Unit, x: number, y: number): boolean {
         const tile = this.iso.getTile(x, y);
-        if (tile) {
+        if (tile && !this.grid[x + y * this.dimension]) {
             unit.pos = tile.pos;
             unit.addComponent(new IsometricEntityComponent(this.iso));
             this.scene.add(unit);
             this.grid[x + y * this.dimension] = unit;
+            return true;
         }
+        return false;
     }
 
     checkSolved(): boolean {
