@@ -33,37 +33,20 @@ export class Level extends Scene {
     placeSelection = (evt: PointerEvent) => {
         if (this.puzzleGrid.validTile(evt.worldPos)) {
             const tileCoord = this.puzzleGrid.getTileCoord(evt.worldPos);
-            // do we have a currently selected unit?
-            if(this.currentSelection){
-                if (tileCoord) {
+            if(tileCoord) {
+                const previousUnit = this.puzzleGrid.getUnit(tileCoord.x, tileCoord.y);
+                if(!!previousUnit && !previousUnit.config.fixed) {
+                    this.puzzleGrid.clearCell(tileCoord.x, tileCoord.y);
+                    this.inventory.addToInventory(previousUnit.config.type);
+                }
+                if(this.currentSelection) {
                     const success = this.puzzleGrid.addUnit(this.currentSelection, tileCoord.x, tileCoord.y);
                     if (success) {
                         this.currentSelection = null;
-                    } else {
-                        const previousUnit = this.puzzleGrid.getUnit(tileCoord.x, tileCoord.y)!;
-                        if(previousUnit.config.fixed){ return; }
-                        this.puzzleGrid.clearCell(tileCoord.x, tileCoord.y);
-                        this.puzzleGrid.addUnit(this.currentSelection, tileCoord.x, tileCoord.y);
-                        const counts = this.inventory.getInventoryConfig();
-                        counts[previousUnit.config.type]++;
-                        this.inventory.setInventoryConfig(counts);
-                        this.currentSelection = null;
-                    }
-                }
-            } else {
-                // we want to clear the current tile
-                if(tileCoord){
-                    const previousUnit = this.puzzleGrid.getUnit(tileCoord.x, tileCoord.y);
-                    if(!!previousUnit) {
-                        if(previousUnit.config.fixed){ return; }
-                        this.puzzleGrid.clearCell(tileCoord.x, tileCoord.y);
-                        this.inventory.addToInventory(previousUnit.config.type);
                     }
                 }
             }
-            
         }
-        
         
         if(this.puzzleGrid.checkSolved()) { 
             const nextLevel = this.level + 1;
