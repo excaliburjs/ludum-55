@@ -73,6 +73,19 @@ export class PuzzleGrid {
                 scene.add(label);
             }
         }
+
+        for (let [index, rowGoal] of this.goals.rows.entries()) {
+            
+            const bottomMostTile = this.iso.getTile(index, dimension - 1);
+            if (bottomMostTile) {
+                const label = new Label({
+                    text: rowGoal.toString(),
+                    font: this.goalFont
+                });
+                label.pos = bottomMostTile.pos.add(vec(-32, 32));
+                scene.add(label);
+            }
+        }
     }
 
 
