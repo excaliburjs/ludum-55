@@ -1,4 +1,4 @@
-import { Engine, IsometricEntityComponent, Scene, vec, PointerEvent, KeyEvent, Keys, clamp } from "excalibur";
+import { Engine, IsometricEntityComponent, Scene, vec, PointerEvent, KeyEvent, Keys, clamp, FadeInOut, Transition } from "excalibur";
 import { PuzzleGrid } from "../puzzle-grid";
 import { Unit } from "../unit";
 import { Inventory } from "../inventory";
@@ -53,7 +53,10 @@ export class Level extends Scene {
             console.log(nextLevel)
             const sceneKey = `level ${nextLevel}`;
             this.engine.addScene(sceneKey, new Level(nextLevel));
-            this.engine.goToScene(sceneKey);
+            this.engine.goToScene(sceneKey, { 
+                destinationIn: new FadeInOut({direction: 'in', duration: 2000}),
+                sourceOut: new FadeInOut({direction: 'out', duration: 2000}),
+            });
         }
     }
 
@@ -138,7 +141,6 @@ export class Level extends Scene {
         this.inventory = document.getElementsByTagName('app-inventory')[0]! as Inventory;
         this.inventory.setLevel(this);
         let inventory = calculateInventory(this.level, this);
-        console.log(inventory);
         this.inventory.setInventoryConfig(inventory);
         this.input.pointers.on('move', this.moveSelection);
         this.input.pointers.on('down', this.placeSelection);
