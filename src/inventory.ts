@@ -102,6 +102,11 @@ export class Inventory extends LitElement {
         return this.counts;
     }
 
+    addToInventory(monster: UnitType) {
+        this.counts[monster]++;
+        this.requestUpdate();
+    }
+
     setLevel(level: Level) {
         this.level = level;
     }

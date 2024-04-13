@@ -10,15 +10,15 @@ export class Level extends Scene {
     currentSelection: Unit | null = null;
     inventory!: Inventory;
     currentSelectedCoordinate: { x: number; y: number; } = { x: 0, y: 0 };
-
+    
     constructor(private level: number) {
         super();
         this.puzzleGrid = buildPuzzle(level, this);
-
+        
         this.camera.zoom = 2;
         this.camera.pos = this.puzzleGrid.iso.transform.pos.add(vec(0, 100));
     }
-
+    
     moveSelection = (evt: PointerEvent) => {
         if (this.currentSelection) {
             this.currentSelection.pos = evt.worldPos;
@@ -29,26 +29,42 @@ export class Level extends Scene {
             this.currentSelectedCoordinate = {x: tile.x, y: tile.y };
         }
     }
-
+    
     placeSelection = (evt: PointerEvent) => {
-        if (this.currentSelection && this.puzzleGrid.validTile(evt.worldPos)) {
+        if (this.puzzleGrid.validTile(evt.worldPos)) {
             const tileCoord = this.puzzleGrid.getTileCoord(evt.worldPos);
-            if (tileCoord) {
-                const success = this.puzzleGrid.addUnit(this.currentSelection, tileCoord.x, tileCoord.y);
-                if (success) {
-                    this.currentSelection = null;
-                } else {
-                    const previousUnit = this.puzzleGrid.getUnit(tileCoord.x, tileCoord.y)!;
-                    if(previousUnit.config.fixed){ return; }
-                    this.puzzleGrid.clearCell(tileCoord.x, tileCoord.y);
-                    this.puzzleGrid.addUnit(this.currentSelection, tileCoord.x, tileCoord.y);
-                    const counts = this.inventory.getInventoryConfig();
-                    counts[previousUnit.config.type]++;
-                    this.inventory.setInventoryConfig(counts);
-                    this.currentSelection = null;
+            // do we have a currently selected unit?
+            if(this.currentSelection){
+                if (tileCoord) {
+                    const success = this.puzzleGrid.addUnit(this.currentSelection, tileCoord.x, tileCoord.y);
+                    if (success) {
+                        this.currentSelection = null;
+                    } else {
+                        const previousUnit = this.puzzleGrid.getUnit(tileCoord.x, tileCoord.y)!;
+                        if(previousUnit.config.fixed){ return; }
+                        this.puzzleGrid.clearCell(tileCoord.x, tileCoord.y);
+                        this.puzzleGrid.addUnit(this.currentSelection, tileCoord.x, tileCoord.y);
+                        const counts = this.inventory.getInventoryConfig();
+                        counts[previousUnit.config.type]++;
+                        this.inventory.setInventoryConfig(counts);
+                        this.currentSelection = null;
+                    }
+                }
+            } else {
+                // we want to clear the current tile
+                if(tileCoord){
+                    const previousUnit = this.puzzleGrid.getUnit(tileCoord.x, tileCoord.y);
+                    if(!!previousUnit) {
+                        if(previousUnit.config.fixed){ return; }
+                        this.puzzleGrid.clearCell(tileCoord.x, tileCoord.y);
+                        this.inventory.addToInventory(previousUnit.config.type);
+                    }
                 }
             }
+            
         }
+        
+        
         if(this.puzzleGrid.checkSolved()) { 
             const nextLevel = this.level + 1;
             const sceneKey = `level ${nextLevel}`;
@@ -59,9 +75,9 @@ export class Level extends Scene {
             });
         }
     }
-
+    
     keyboardDown = (evt: KeyEvent) => {
-
+        
         // Move cursor
         switch (evt.key) {
             case Keys.A:
@@ -86,9 +102,9 @@ export class Level extends Scene {
             }
         }
         this.puzzleGrid.showHighlightByCoordinate(this.currentSelectedCoordinate.x, this.currentSelectedCoordinate.y);
-
+        
         // Place unit
-
+        
         const placeUnitWithKeyboard = () => {
             if (this.currentSelection) {
                 const success = this.puzzleGrid.addUnit(this.currentSelection, this.currentSelectedCoordinate.x, this.currentSelectedCoordinate.y);
@@ -97,7 +113,7 @@ export class Level extends Scene {
                 }
             }
         }
-
+        
         switch (evt.key) {
             case Keys.Digit1:
             case Keys.Numpad1: {
@@ -129,14 +145,14 @@ export class Level extends Scene {
                 placeUnitWithKeyboard();
                 break;
             }
-
+            
             case Keys.Esc: {
                 this.cancelSelection();
                 break;
             }
         }
     }
-
+    
     onInitialize(engine: Engine<any>): void {
         this.inventory = document.getElementsByTagName('app-inventory')[0]! as Inventory;
         this.inventory.setLevel(this);
@@ -146,7 +162,7 @@ export class Level extends Scene {
         this.input.pointers.on('down', this.placeSelection);
         this.input.keyboard.on('press', this.keyboardDown);
     }
-
+    
     selectUnit(unit: Unit) {
         if (this.currentSelection) {
             this.remove(this.currentSelection);
@@ -156,7 +172,7 @@ export class Level extends Scene {
         this.currentSelection = unit;
         this.add(unit);
     }
-
+    
     cancelSelection() {
         if (this.currentSelection) {
             this.remove(this.currentSelection);
