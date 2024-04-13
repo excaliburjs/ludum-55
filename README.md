@@ -1,4 +1,4 @@
-# Ludum Dare 55
+# Ludum Dare 55 - Sum Monsters
 
 Visit https://excaliburjs.com/ludum-55/ to play!
 
