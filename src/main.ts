@@ -4,6 +4,8 @@ import { SoundManager } from "./sound-manager";
 import { loadPreferences } from "./preferences";
 import { IntroLevel } from "./levels/intro-level";
 
+import './inventory';
+
 const game = new Engine({
     width: 800,
     height: 600,
