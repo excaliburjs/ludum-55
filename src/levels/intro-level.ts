@@ -2,6 +2,7 @@ import { Engine, IsometricEntityComponent, Scene, vec, PointerEvent } from "exca
 import { PuzzleGrid } from "../puzzle-grid";
 import { Unit } from "../unit";
 import { Inventory } from "../inventory";
+import { buildPuzzle } from "../puzzle-builder";
 
 
 export class Level extends Scene {
@@ -13,17 +14,7 @@ export class Level extends Scene {
 
     constructor() {
         super();
-        this.puzzleGrid = new PuzzleGrid(this, {
-            pos: vec(400, 100),
-            dimension: 3,
-            goals: {
-                columns: [1, 2, 3],
-                rows: [1, 2, 3]
-            }
-        });
-
-        this.puzzleGrid.addUnit(new Unit({type: 'dragon'}), 0, 0)
-        this.puzzleGrid.addUnit(new Unit({type: 'kobold'}), 2, 0)
+        this.puzzleGrid = buildPuzzle(0, this);
 
         this.camera.zoom = 2;
         this.camera.pos = this.puzzleGrid.iso.transform.pos;
