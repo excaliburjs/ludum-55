@@ -38,16 +38,20 @@ export class Level extends Scene {
                 if(!!previousUnit && !previousUnit.config.fixed) {
                     this.puzzleGrid.clearCell(tileCoord.x, tileCoord.y);
                     this.inventory.addToInventory(previousUnit.config.type);
+                    this.checkSolution();
                 }
                 if(this.currentSelection) {
                     const success = this.puzzleGrid.addUnit(this.currentSelection, tileCoord.x, tileCoord.y);
                     if (success) {
                         this.currentSelection = null;
+                        this.checkSolution();
                     }
                 }
             }
         }
-        
+    }
+
+    checkSolution() {
         if(this.puzzleGrid.checkSolved()) { 
             const nextLevel = this.level + 1;
             const sceneKey = `level ${nextLevel}`;
