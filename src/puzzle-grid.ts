@@ -218,7 +218,8 @@ export class PuzzleGrid {
     }
 
     /**
-     * 
+     * Checks whether the board state is solved
+     * Also updates row/column numbers...yes, it should probably be done elsewhere
      * @returns whether or not the board state is solved
      */
     checkSolved(): boolean {
