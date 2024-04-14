@@ -78,12 +78,11 @@ export class Level extends Scene {
           const valueHint = this.puzzleGrid.getValueHint(x,y)
           if (valueHint) {
             valueHint.graphics.use(ValueHintSprite[unitType]);
-            valueHint.graphics.visible = true;
+            unit?.actions.fade(0.4, 250).callMethod(() => {
+                valueHint.graphics.visible = true;
+            });
           }
-        //   unit?.actions.
-        //   unit?.actions.fade(0.4, 500).callMethod(() => {
-        //     this.puzzleGrid.valueHint.graphics.visible = true;
-        //   });
+   
           SfxrSounds.place.play();
         }
       }
