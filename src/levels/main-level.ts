@@ -65,6 +65,7 @@ export class Level extends Scene {
           this.puzzleGrid.clearCell(tileCoord.x, tileCoord.y);
           this.inventory.addToInventory(previousUnit.config.type);
           this.checkSolution();
+          SfxrSounds.remove.play!();
         }
         if (this.currentSelection) {
           const success = this.puzzleGrid.addUnit(
