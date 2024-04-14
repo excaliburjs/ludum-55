@@ -30,7 +30,7 @@ export class Inventory extends LitElement {
 
             .container {
                 display: block;
-                background-color: black;
+                background-color: #000000aa;
                 border-radius: 5px;
                 color: white;
                 position: absolute;
