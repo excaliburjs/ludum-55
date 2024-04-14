@@ -2,12 +2,12 @@
 
 Visit https://excaliburjs.com/ludum-55/ to play!
 
-### Perquisites
+## Prerequisites
 
 - NodeJS 20.x
 - Git
 
-### Local Development
+## Local Development
 
 Updating your local copy with `git pull -r` to rebase your local commits on top of upstream, makes the `main` easy to follow and merges less difficult.
 
@@ -31,8 +31,8 @@ Updating your local copy with `git pull -r` to rebase your local commits on top 
 
 6. Make your changes, commit directly to the 'main' branch, update your local copy with `git pull -r`, and then push to the remote repository.
 
-7. If you run into weird caching issues, run `npm run clean` to clean out the dist and the parcel cache folders.
+7. If you run into weird caching issues where your updates aren't showing up when you run the game locally, stop the game and run `npm run clean` to clean out the `/dist` and the `/.parcel-cache` folders.
 
-#### Debugging tools
+### Debugging tools
 
-We have excalibur chrome extension https://chromewebstore.google.com/detail/excalibur-dev-tools/dinddaeielhddflijbbcmpefamfffekc
+You can use the [Excalibur chrome extension](https://chromewebstore.google.com/detail/excalibur-dev-tools/dinddaeielhddflijbbcmpefamfffekc) to help with debugging.
