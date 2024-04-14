@@ -35,14 +35,14 @@ export class Inventory extends LitElement {
             .container {
                 pointer-events: none;
                 display: block;
-                background-color: #8d8d8daa;
+                background-color: #42002077;// #8d8d8daa;
                 border-radius: 5px;
                 color: white;
                 position: absolute;
                 padding: 1rem;
                 font-size: 24px;
                 transform-origin: 0 0;
-                transform: scale(calc(var(--pixel-conversion) / 2), calc(var(--pixel-conversion) / 2));
+                transform: scale(calc(var(--pixel-conversion) / 3), calc(var(--pixel-conversion) / 3));
             }
 
             ul {
