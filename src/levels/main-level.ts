@@ -101,7 +101,6 @@ export class Level extends Scene {
           const previousUnit = this.puzzleGrid.getUnit(tileCoord.x, tileCoord.y);
           this.placeSelectionOnTile(tileCoord.x, tileCoord.y);
           if (!!previousUnit && !previousUnit.config.fixed) {
-            this.puzzleGrid.clearCell(tileCoord.x, tileCoord.y);
             this.selectUnit(previousUnit);
           }
         }
