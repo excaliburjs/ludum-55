@@ -43,7 +43,7 @@ export class Level extends Scene {
     this.inventory.setInventoryConfig(inventory);
     
     this.input.pointers.on("move", this.moveSelection);
-    this.input.pointers.on("down", this.placeSelection);
+    this.input.pointers.on("down", this.placeUnitWithPointer);
     this.input.keyboard.on("press", this.keyboardDown);
   }
   onActivate(context: SceneActivationContext<unknown>): void {
@@ -64,9 +64,22 @@ export class Level extends Scene {
     }
   };
 
-  placeSelection = (evt: PointerEvent) => {
+  placeSelectionOnTile = (x: number, y: number) => {
+    if (this.currentSelection) {
+        const success = this.puzzleGrid.addUnit(
+          this.currentSelection, x, y);
+        if (success) {
+          this.currentSelection = null;
+          this.checkSolution();
+          SfxrSounds.place.play();
+        }
+      }
+  }
+
+  placeUnitWithPointer = (evt: PointerEvent) => {
     if (this.puzzleGrid.validTile(evt.worldPos)) {
       const tileCoord = this.puzzleGrid.getTileCoord(evt.worldPos);
+      // TODO unify this logic so you can do it with keyboard also
       if (tileCoord) {
         const previousUnit = this.puzzleGrid.getUnit(tileCoord.x, tileCoord.y);
         if (!!previousUnit && !previousUnit.config.fixed) {
@@ -75,20 +88,13 @@ export class Level extends Scene {
           this.checkSolution();
           SfxrSounds.remove.play();
         }
-        if (this.currentSelection) {
-          const success = this.puzzleGrid.addUnit(
-            this.currentSelection,
-            tileCoord.x,
-            tileCoord.y
-          );
-          if (success) {
-            this.currentSelection = null;
-            this.checkSolution();
-            SfxrSounds.place.play();
-          }
-        }
+        this.placeSelectionOnTile(tileCoord.x, tileCoord.y);
       }
     }
+  };
+
+  placeUnitWithKeyboard = () => {
+    this.placeSelectionOnTile(this.currentSelectedCoordinate.x, this.currentSelectedCoordinate.y)
   };
 
   checkSolution() {
@@ -149,44 +155,29 @@ export class Level extends Scene {
       this.currentSelectedCoordinate.y
     );
 
-    // Place unit
-
-    const placeUnitWithKeyboard = () => {
-      if (this.currentSelection) {
-        const success = this.puzzleGrid.addUnit(
-          this.currentSelection,
-          this.currentSelectedCoordinate.x,
-          this.currentSelectedCoordinate.y
-        );
-        if (success) {
-          this.currentSelection = null;
-        }
-      }
-    };
-
     switch (evt.key) {
       case Keys.Digit1:
       case Keys.Numpad1: {
         this.inventory.onSelection("rat")();
-        placeUnitWithKeyboard();
+        this.placeUnitWithKeyboard();
         break;
       }
       case Keys.Digit2:
       case Keys.Numpad2: {
         this.inventory.onSelection("goblin")();
-        placeUnitWithKeyboard();
+        this.placeUnitWithKeyboard();
         break;
       }
       case Keys.Digit3:
       case Keys.Numpad3: {
         this.inventory.onSelection("orc")();
-        placeUnitWithKeyboard();
+        this.placeUnitWithKeyboard();
         break;
       }
       case Keys.Digit5:
       case Keys.Numpad5: {
         this.inventory.onSelection("dragon")();
-        placeUnitWithKeyboard();
+        this.placeUnitWithKeyboard();
         break;
       }
 
