@@ -156,12 +156,13 @@ export class Inventory extends LitElement {
     }
 
     render() {
-        return html`
-        <div class="container" style=${styleMap({
+        const styles = {
             visibility: this.visible ? 'visible' : 'hidden',
             left: `${this.left}px`,
             top: `${this.top}px`
-        })}>
+        }
+        return html`
+        <div class="container" style=${styleMap(styles)}>
             <h2>Summons</h2>
             <ul>
                 ${Object.entries(this.counts).map(([type, count]) => count > 0 ? html`
