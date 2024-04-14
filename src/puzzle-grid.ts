@@ -202,10 +202,14 @@ export class PuzzleGrid {
      */
     clearCell(x: number, y: number): void {
         let unit = this.grid[x + y * this.dimension];
-        if(unit) {
+        if (unit) {
             unit.kill();
         }
         this.grid[x + y * this.dimension] = null;
+        let valueHint = this.hintGrid[x + y * this.dimension];
+        if (valueHint) {
+            valueHint.graphics.visible = false;
+        }
     }
 
     /**
