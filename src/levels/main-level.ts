@@ -12,7 +12,7 @@ import {
   SceneActivationContext,
   Color,
 } from "excalibur";
-import { PuzzleGrid } from "../puzzle-grid";
+import { PuzzleGrid, ValueHintSprite } from "../puzzle-grid";
 import { Unit } from "../unit";
 import { Inventory } from "../inventory";
 import { buildPuzzle, calculateInventory } from "../puzzle-builder";
@@ -67,6 +67,7 @@ export class Level extends Scene {
 
   placeSelectionOnTile = (x: number, y: number) => {
     if (this.currentSelection) {
+        const unitType = this.currentSelection.config.type;
         const success = this.puzzleGrid.addUnit(
           this.currentSelection, x, y);
         if (success) {
@@ -76,6 +77,7 @@ export class Level extends Scene {
           // TODO play the summoning animation (separate from, but added to each of the creatures?)
           const valueHint = this.puzzleGrid.getValueHint(x,y)
           if (valueHint) {
+            valueHint.graphics.use(ValueHintSprite[unitType]);
             valueHint.graphics.visible = true;
           }
         //   unit?.actions.
