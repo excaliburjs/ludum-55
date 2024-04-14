@@ -1,10 +1,11 @@
-import { DisplayMode, Engine, FadeInOut } from "excalibur";
+import { Color, DisplayMode, Engine, FadeInOut } from "excalibur";
 import { loader } from "./resources";
 import { SoundManager } from "./sound-manager";
 import { loadPreferences } from "./preferences";
 import { Level } from "./levels/main-level";
+import { StartScreen } from "./levels/start-screen";
 
-import "./inventory";
+import "./inventory"; // lit component
 
 loadPreferences();
 SoundManager.init();
@@ -17,11 +18,12 @@ const game = new Engine({
   pixelArt: true,
   pixelRatio: 2,
   scenes: {
+    startScreen: StartScreen,
     introLevel: new Level(0),
   },
 });
 
-game.start("introLevel", {
-  inTransition: new FadeInOut({ direction: "in", duration: 2000 }),
+game.start("startScreen", {
+  inTransition: new FadeInOut({ direction: "in", color: Color.ExcaliburBlue, duration: 1000 }),
   loader,
 });

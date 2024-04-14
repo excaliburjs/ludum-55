@@ -3,6 +3,9 @@ import { ImageSource, Loader, Sound, SpriteSheet } from "excalibur";
 import swordPng from "./images/template-sample-image-sword.png";
 import tilesPng from "./images/isometric-tiles.png";
 import monsterPng from "./images/monsters.png";
+import largeSummonCirclePng from './images/large-summon-circle.png';
+import titleTextPng from './images/sum-logo.png';
+import playNowTextPng from './images/playnow.png';
 import projectileMp3 from "./sounds/template-sample-sound-projectile.mp3";
 import backgroundMusicMp3 from "./sounds/background.mp3";
 import { SoundConfig } from "@excaliburjs/plugin-jsfxr";
@@ -15,6 +18,9 @@ export const Resources = {
   Sword: new ImageSource(swordPng),
   TilesSheetImage: new ImageSource(tilesPng),
   MonsterSheetImage: new ImageSource(monsterPng),
+  LargeSummonCircleImage: new ImageSource(largeSummonCirclePng),
+  TitleTextImage: new ImageSource(titleTextPng),
+  PlayNowImage: new ImageSource(playNowTextPng),
   ProjectileSound: new Sound(projectileMp3),
   BackgroundMusic: new Sound(backgroundMusicMp3),
 } as const;
