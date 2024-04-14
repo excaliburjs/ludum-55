@@ -30,7 +30,7 @@ export class PuzzleGrid {
     private highlightSprite: Sprite;
     private unplaceableHighlightSprite: Sprite;
 
-    private valueHint: Actor;
+    public hintGrid: (Actor | null)[];
 
     public iso: IsometricMap;
 
@@ -68,17 +68,6 @@ export class PuzzleGrid {
         this.highlightSprite = TilesSpriteSheet.getSprite(1, 0);
         this.unplaceableHighlightSprite = TilesSpriteSheet.getSprite(2, 0);
 
-
-        this.valueHint = new Actor({
-            width: 64,
-            height: 64,
-            anchor: vec(0.5, 1)
-        });
-        this.valueHint.addComponent(new IsometricEntityComponent(this.iso));
-        this.valueHint.get(IsometricEntityComponent).elevation = 4;
-        this.valueHint.graphics.visible = false;
-        scene.add(this.valueHint);
-
         this.highlight = new Actor({
             width: 64,
             height: 64,
@@ -101,6 +90,7 @@ export class PuzzleGrid {
 
         this.dimension = dimension;
         this.grid = new Array(dimension * dimension).fill(null);
+        this.hintGrid = new Array(dimension * dimension).fill(null);
 
         for (let tile of this.iso.tiles) {
             tile.addGraphic(this.grassTile);
@@ -154,15 +144,6 @@ export class PuzzleGrid {
             } else {
                 this.highlight.graphics.use(this.highlightSprite);
             }
-            const type = this.getType(tile.x, tile.y);
-            if (type) {
-                this.valueHint.graphics.use(ValueHintSprite[type]);
-                this.valueHint.graphics.visible = true;
-                this.valueHint.pos = tile.pos;
-                this.valueHint.graphics.offset = vec(0, -16);
-            } else {
-                this.valueHint.graphics.visible = false;
-            }
             this.highlight.graphics.visible = true;
             this.highlight.pos = tile.pos;
             this.highlight.graphics.offset = vec(0, 32);
@@ -177,15 +158,6 @@ export class PuzzleGrid {
                 this.highlight.graphics.use(this.unplaceableHighlightSprite);
             } else {
                 this.highlight.graphics.use(this.highlightSprite);
-            }
-            const type = this.getType(tile.x, tile.y);
-            if (type) {
-                this.valueHint.graphics.use(ValueHintSprite[type]);
-                this.valueHint.graphics.visible = true;
-                this.valueHint.pos = tile.pos;
-                this.valueHint.graphics.offset = vec(0, -16);
-            } else {
-                this.valueHint.graphics.visible = false;
             }
             this.highlight.graphics.visible = true;
             this.highlight.pos = tile.pos;
@@ -209,7 +181,6 @@ export class PuzzleGrid {
     }
 
     hideHighlight() {
-        this.valueHint.graphics.visible = false;
         this.highlight.graphics.visible = false;
     }
 
@@ -264,6 +235,48 @@ export class PuzzleGrid {
             unit.get(IsometricEntityComponent).elevation = 3;
             this.scene.add(unit);
             this.grid[x + y * this.dimension] = unit;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get the valueHint at a current cell
+     * @param x 
+     * @param y 
+     * @returns Actor or null
+     */
+    getValueHint(x: number, y: number): Actor | null {
+        return this.hintGrid[x + y * this.dimension];
+    }
+
+    /**
+     * Adds a value hint to a grid cell, returns true if placed, false if unsuccessful (value hint already placed)
+     * @param x 
+     * @param y 
+     */
+    addValueHint(x: number, y: number): boolean {
+        const hint = new Actor({
+            width: 64,
+            height: 64,
+            anchor: vec(0.5, 1)
+        });
+
+        const tile = this.iso.getTile(x, y);
+
+        if (tile && this.hintGrid[x + y * this.dimension]) {
+            return false;
+        }
+
+        if (tile && !this.hintGrid[x + y * this.dimension]) {
+            hint.pos = tile.pos;
+            hint.addComponent(new IsometricEntityComponent(this.iso));
+            hint.get(IsometricEntityComponent).elevation = 4;
+            hint.graphics.use(ValueHintSprite['rat']); // TODO
+            hint.graphics.offset = vec(0, -8);
+            hint.graphics.visible = false;
+            this.scene.add(hint);
+            this.hintGrid[x + y * this.dimension] = hint;
             return true;
         }
         return false;

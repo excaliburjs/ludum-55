@@ -71,6 +71,16 @@ export class Level extends Scene {
         if (success) {
           this.currentSelection = null;
           this.checkSolution();
+          const unit = this.puzzleGrid.getUnit(x, y);
+          // TODO play the summoning animation (separate from, but added to each of the creatures?)
+          const valueHint = this.puzzleGrid.getValueHint(x,y)
+          if (valueHint) {
+            valueHint.graphics.visible = true;
+          }
+        //   unit?.actions.
+        //   unit?.actions.fade(0.4, 500).callMethod(() => {
+        //     this.puzzleGrid.valueHint.graphics.visible = true;
+        //   });
           SfxrSounds.place.play();
         }
       }

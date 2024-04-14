@@ -29,6 +29,9 @@ function populatePuzzle(puzzleIndex: number, puzzleGrid: PuzzleGrid) {
     for(let i=0; i < puzzleArray.length; i++) {
         let row = puzzleArray[i];
         for(let j=0; j < row.length; j++) {
+            
+            puzzleGrid.addValueHint(j, i);
+
             const cellValue = row[j];
             if (cellValue < 0) {
                 const unitType = UnitNumberToUnitType.get(cellValue);
@@ -38,7 +41,6 @@ function populatePuzzle(puzzleIndex: number, puzzleGrid: PuzzleGrid) {
                     console.error(`No unit type matches the number ${cellValue}`);
                 }
             } else if (cellValue === 0 || typeof cellValue === 'string') {
-                // TODO add to list of empty spaces to place
                 switch(cellValue) {
                     case 'w': {
                         puzzleGrid.addUnit(new Unit({type: 'wall'}), j, i);
