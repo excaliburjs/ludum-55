@@ -3,7 +3,7 @@ import { customElement, property } from 'lit/decorators.js'
 
 import monsterSheetPng from './images/monsters.png';
 import { Level } from './levels/main-level';
-import { Unit, UnitType } from './unit';
+import { Unit, UnitType, UnitsConfig } from './unit';
 
 export type InventoryConfig = Record<UnitType, number>;
 
@@ -31,12 +31,13 @@ export class Inventory extends LitElement {
             .container {
                 display: block;
                 background-color: black;
+                border-radius: 5px;
                 color: white;
                 position: absolute;
                 right: 0;
                 top: 0;
                 padding: 1rem;
-                font-size: 24px
+                font-size: 24px;
             }
 
             ul {
@@ -46,6 +47,10 @@ export class Inventory extends LitElement {
             button {
                 all: unset;
                 cursor: pointer;
+                border-radius: 5px;
+                background-color: #1e1e1e;
+                margin: 5px;
+                padding: 5px;
             }
             button:hover,button:focus-visible {
                 outline: white solid 2px;
@@ -133,11 +138,11 @@ export class Inventory extends LitElement {
     render() {
         return html`
         <div class="container">
-            <h2>Inventory</h2>
+            <h2>Summons</h2>
             <ul>
                 ${Object.entries(this.counts).map(([type, count]) => count > 0 ? html`
                     <li>
-                        <button @click=${this.onSelection(type as UnitType)}>
+                        <button .title=${'Summoned Unit Value: ' + UnitsConfig[type as UnitType].value.toString()} @click=${this.onSelection(type as UnitType)}>
                             <span>${type}</span>
                             ${new Array(count).fill(null).map(() => 
                                 html`<div class="unit-image ${type}"></div>`
