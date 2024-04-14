@@ -5,6 +5,7 @@ import {styleMap} from 'lit/directives/style-map.js';
 import monsterSheetPng from './images/monsters.png';
 import { Level } from './levels/main-level';
 import { Unit, UnitType, UnitsConfig } from './unit';
+import { Vector } from 'excalibur';
 
 export type InventoryConfig = Record<UnitType, number>;
 
@@ -18,6 +19,9 @@ export class Inventory extends LitElement {
         knight: 0,
         archer: 0
     };
+
+    left = 0;
+    top = 0;
     static styles = [
         css`
             :root {
@@ -31,14 +35,14 @@ export class Inventory extends LitElement {
             .container {
                 pointer-events: none;
                 display: block;
-                background-color: #000000aa;
+                background-color: #8d8d8daa;
                 border-radius: 5px;
                 color: white;
                 position: absolute;
-                right: 0;
-                top: 0;
                 padding: 1rem;
                 font-size: 24px;
+                transform-origin: 0 0;
+                transform: scale(calc(var(--pixel-conversion) / 2), calc(var(--pixel-conversion) / 2));
             }
 
             ul {
@@ -121,6 +125,14 @@ export class Inventory extends LitElement {
     setLevel(level: Level) {
         this.level = level;
     }
+
+    setInventoryPositionTopRight(pos: Vector) {
+        const container = this.renderRoot.querySelector('.container') as HTMLElement;
+        const rect = container.getBoundingClientRect()
+        this.left = pos.x - rect.width;
+        this.top = pos.y;
+        this.requestUpdate();
+    }
     
     override firstUpdated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
         const container = this.renderRoot.querySelector('.container') as HTMLElement;
@@ -144,7 +156,9 @@ export class Inventory extends LitElement {
     render() {
         return html`
         <div class="container" style=${styleMap({
-            visibility: this.visible ? 'visible' : 'hidden'
+            visibility: this.visible ? 'visible' : 'hidden',
+            left: `${this.left}px`,
+            top: `${this.top}px`
         })}>
             <h2>Summons</h2>
             <ul>

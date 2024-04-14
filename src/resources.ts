@@ -1,4 +1,6 @@
 import { Color, FontSource, ImageSource, Loader, Sound, SpriteSheet } from "excalibur";
+import { SoundConfig } from "@excaliburjs/plugin-jsfxr";
+import { AsepriteResource } from "@excaliburjs/plugin-aseprite";
 
 import swordPng from "./images/template-sample-image-sword.png";
 import tilesPng from "./images/isometric-tiles.png";
@@ -6,9 +8,11 @@ import monsterPng from "./images/monsters.png";
 import largeSummonCirclePng from './images/large-summon-circle.png';
 import titleTextPng from './images/sum-logo.png';
 import playNowTextPng from './images/playnow.png';
+
+import summonerIdleAseprite from './images/SummonerSpriteStart.aseprite';
+
 import projectileMp3 from "./sounds/template-sample-sound-projectile.mp3";
 import backgroundMusicMp3 from "./sounds/background.mp3";
-import { SoundConfig } from "@excaliburjs/plugin-jsfxr";
 
 interface PlayableSfxrSoundConfig extends SoundConfig {
   play(): void;
@@ -21,6 +25,7 @@ export const Resources = {
   LargeSummonCircleImage: new ImageSource(largeSummonCirclePng),
   TitleTextImage: new ImageSource(titleTextPng),
   PlayNowImage: new ImageSource(playNowTextPng),
+  SummonerIdle: new AsepriteResource(summonerIdleAseprite),
   ProjectileSound: new Sound(projectileMp3),
   BackgroundMusic: new Sound(backgroundMusicMp3),
 } as const;

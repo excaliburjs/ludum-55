@@ -1,11 +1,12 @@
-import { Color, DisplayMode, Engine, FadeInOut } from "excalibur";
+import { Color, DisplayMode, Engine, FadeInOut, Vector, vec } from "excalibur";
 import { loader } from "./resources";
 import { SoundManager } from "./sound-manager";
 import { loadPreferences } from "./preferences";
-import { Level } from "./levels/main-level";
+import { Level, setWorldPixelConversion } from "./levels/main-level";
 import { StartScreen } from "./levels/start-screen";
 
 import "./inventory"; // lit component
+import { Inventory } from "./inventory";
 
 loadPreferences();
 SoundManager.init();
@@ -23,6 +24,7 @@ const game = new Engine({
   },
 });
 
+game.screen.events.on('resize', () => setWorldPixelConversion(game));
 game.start("startScreen", {
   inTransition: new FadeInOut({ direction: "in", color: Color.fromHex('#420020'), duration: 1000 }),
   loader,

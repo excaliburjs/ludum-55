@@ -18,3 +18,8 @@ declare module "*.wav" {
     const val: string;
     export default val;
 }
+
+declare module "*.aseprite" {
+    const val: string;
+    export default val;
+}

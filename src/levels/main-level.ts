@@ -11,26 +11,44 @@ import {
   Transition,
   SceneActivationContext,
   Color,
+  Actor,
+  CoordPlane,
+  Vector,
 } from "excalibur";
 import { PuzzleGrid, ValueHintSprite } from "../puzzle-grid";
 import { Unit } from "../unit";
 import { Inventory } from "../inventory";
 import { buildPuzzle, calculateInventory } from "../puzzle-builder";
 import { SoundManager } from "../sound-manager";
-import { SfxrSounds } from "../resources";
+import { Resources, SfxrSounds } from "../resources";
+
+export const setWorldPixelConversion = (game: Engine) => {
+    const pageOrigin = game.screen.worldToPageCoordinates(Vector.Zero);
+    const pageDistance = game.screen.worldToPageCoordinates(vec(1, 0)).sub(pageOrigin);
+    const pixelConversion = pageDistance.x;
+    document.documentElement.style.setProperty('--pixel-conversion', pixelConversion.toString());
+
+    const pos = game.screen.screenToPageCoordinates(vec(800 - 20, 20));
+    const inventory = document.getElementsByTagName(
+        "app-inventory"
+      )[0]! as Inventory;
+    inventory.setInventoryPositionTopRight(pos);
+}
 
 export class Level extends Scene {
   puzzleGrid: PuzzleGrid;
   currentSelection: Unit | null = null;
   inventory!: Inventory;
   currentSelectedCoordinate: { x: number; y: number } = { x: 0, y: 0 };
-  
+  summoner!: Actor;
+
   constructor(private level: number) {
     super();
     this.puzzleGrid = buildPuzzle(level, this);
     
     this.camera.zoom = 2;
     this.camera.pos = this.puzzleGrid.iso.transform.pos.add(vec(0, 100));
+    
   }
   
   onInitialize(engine: Engine<any>): void {
@@ -42,12 +60,21 @@ export class Level extends Scene {
     this.inventory.setLevel(this);
     let inventory = calculateInventory(this.level, this);
     this.inventory.setInventoryConfig(inventory);
+
+    this.summoner = new Actor({
+        pos: vec(700, 400),
+        scale: vec(2, 2),
+        coordPlane: CoordPlane.Screen
+    });
+    this.summoner.graphics.use(Resources.SummonerIdle.getAnimation('Idle')!);
+    this.add(this.summoner);
     
     this.input.pointers.on("move", this.moveSelection);
     this.input.pointers.on("down", this.placeUnitWithPointer);
     this.input.keyboard.on("press", this.keyboardDown);
   }
   onActivate(context: SceneActivationContext<unknown>): void {
+    setWorldPixelConversion(this.engine);
     this.inventory.toggleVisible(true);
   }
   onDeactivate(context: SceneActivationContext<undefined>): void {
