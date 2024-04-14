@@ -112,6 +112,16 @@ export class Level extends Scene {
   placeUnitWithKeyboard = () => {
     this.placeSelectionOnTile(this.currentSelectedCoordinate.x, this.currentSelectedCoordinate.y)
   };
+  clearCellWithKeyboard = () => {
+    let tileX = this.currentSelectedCoordinate.x;
+    let tileY = this.currentSelectedCoordinate.y;
+    const previousUnit = this.puzzleGrid.getUnit(tileX, tileY);
+    if(!!previousUnit) {
+      if(previousUnit.config.fixed){ return; }
+      this.puzzleGrid.clearCell(tileX, tileY);
+      this.inventory.addToInventory(previousUnit.config.type);
+    }
+  };
 
   checkSolution() {
     if (this.puzzleGrid.checkSolved()) {
