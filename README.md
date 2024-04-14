@@ -19,15 +19,15 @@ Updating your local copy with `git pull -r` to rebase your local commits on top 
 
 3. Run the install to download the tools:
 
-        npm install
+        `npm install`
 
 4. Build the project:
 
-        npm run build
+        `npm run build`
 
 5. Run the game locally with parcel:
 
-        npm start
+        `npm start`
 
 6. Make your changes, commit directly to the 'main' branch, update your local copy with `git pull -r`, and then push to the remote repository.
 
