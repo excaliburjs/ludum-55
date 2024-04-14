@@ -53,7 +53,7 @@ export const UnitsConfig: Record<UnitType, UnitConfig> = {
         type: 'pit',
         fixed: true,
         value: 0,
-        graphic: TilesSpriteSheet.getSprite(7, 0)
+        graphic: TilesSpriteSheet.getSprite(6, 0)
     },
     rubble: {
         type: 'rubble',

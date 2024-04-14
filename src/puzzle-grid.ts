@@ -1,4 +1,4 @@
-import { Actor, Color, Font, FontUnit, IsometricEntityComponent, IsometricMap, Label, Scene, Sprite, Vector, vec } from "excalibur";
+import { Actor, Color, Font, FontUnit, IsometricEntityComponent, IsometricMap, Label, Random, Scene, Sprite, Vector, vec } from "excalibur";
 import { MonsterSpriteSheet, Resources, TilesSpriteSheet } from "./resources";
 import { Unit, UnitType } from "./unit";
 
@@ -26,7 +26,9 @@ export const ValueHintSprite: Record<UnitType, Sprite> = {
 
 export class PuzzleGrid {
 
-    private grassTile: Sprite;
+    private random: Random;
+
+    private groundTile: Sprite[];
     private highlightSprite: Sprite;
     private unplaceableHighlightSprite: Sprite;
 
@@ -56,6 +58,8 @@ export class PuzzleGrid {
     public highlight: Actor;
 
     constructor(private scene: Scene, options: PuzzleGridOptions) {
+        this.random = new Random();
+
         const {dimension, pos, goals} = options;
         this.iso = new IsometricMap({
             rows: dimension,
@@ -65,7 +69,13 @@ export class PuzzleGrid {
             tileHeight: 64 / 2 
         });
 
-        this.grassTile = TilesSpriteSheet.getSprite(0, 0);
+        this.groundTile =[
+            TilesSpriteSheet.getSprite(0, 0),
+            TilesSpriteSheet.getSprite(7, 0),
+            TilesSpriteSheet.getSprite(8, 0),
+            TilesSpriteSheet.getSprite(9, 0),
+            TilesSpriteSheet.getSprite(10, 0),
+        ];
         this.highlightSprite = TilesSpriteSheet.getSprite(1, 0);
         this.unplaceableHighlightSprite = TilesSpriteSheet.getSprite(2, 0);
 
@@ -94,7 +104,8 @@ export class PuzzleGrid {
         this.hintGrid = new Array(dimension * dimension).fill(null);
 
         for (let tile of this.iso.tiles) {
-            tile.addGraphic(this.grassTile);
+            const randGroundTileIndex = this.random.integer(0, this.groundTile.length - 1);
+            tile.addGraphic(this.groundTile[randGroundTileIndex]);
         }
 
         scene.add(this.iso);

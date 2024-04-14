@@ -132,7 +132,7 @@ export const TilesSpriteSheet = SpriteSheet.fromImageSource({
   image: Resources.TilesSheetImage,
   grid: {
     rows: 1,
-    columns: 10,
+    columns: 11,
     spriteHeight: 64,
     spriteWidth: 64,
   },
