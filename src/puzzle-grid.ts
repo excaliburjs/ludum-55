@@ -19,6 +19,7 @@ export class PuzzleGrid {
     private unplaceableHighlightSprite: Sprite;
     public iso: IsometricMap;
 
+
     public goals: {
         rows: number[]; // length dimension
         columns: number[];
@@ -26,6 +27,9 @@ export class PuzzleGrid {
 
     public grid: (Unit | null)[];
     public dimension: number;
+
+    private columnLabels: Label[] = [];
+    private rowLabels: Label[] = [];
 
     public goalFont = new Font({
         family: 'sans-serif',
@@ -88,6 +92,7 @@ export class PuzzleGrid {
                 });
                 label.pos = rightMostTile.pos.add(vec(32, 32));
                 scene.add(label);
+                this.columnLabels.push(label);
             }
         }
 
@@ -101,6 +106,7 @@ export class PuzzleGrid {
                 });
                 label.pos = bottomMostTile.pos.add(vec(-32, 32));
                 scene.add(label);
+                this.rowLabels.push(label);
             }
         }
     }
@@ -216,21 +222,24 @@ export class PuzzleGrid {
      * @returns whether or not the board state is solved
      */
     checkSolved(): boolean {
+        let solved: boolean = true;
         for (let x = 0; x < this.dimension; x++) {
             let rowSum = 0;
             for (let y = 0; y < this.dimension; y++) {
                 rowSum += this.grid[x + y * this.dimension]?.config.value ?? 0
             }
-           if (rowSum != this.goals.rows[x]) return false;
+            this.rowLabels[x].text = (this.goals.rows[x] - rowSum).toString();
+           if (rowSum != this.goals.rows[x]) solved = false;
         }
         for (let y = 0; y < this.dimension; y++) {
             let colSum = 0;
             for (let x = 0; x < this.dimension; x++) {
                 colSum += this.grid[x + y * this.dimension]?.config.value ?? 0
             }
-            if (colSum != this.goals.columns[y]) return false;
+            this.columnLabels[y].text = (this.goals.columns[y] - colSum).toString();
+            if (colSum != this.goals.columns[y]) solved = false;
         }
-        return true;
+        return solved;
     }
 
 }
