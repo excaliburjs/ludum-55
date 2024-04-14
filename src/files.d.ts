@@ -4,6 +4,11 @@ declare module "*.png" {
     export default val;
 }
 
+declare module "*.ttf" {
+    const val: string;
+    export default val;
+}
+
 declare module "*.mp3" {
     const val: string;
     export default val;

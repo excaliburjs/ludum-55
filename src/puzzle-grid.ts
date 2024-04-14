@@ -1,4 +1,4 @@
-import { Actor, Font, FontUnit, IsometricEntityComponent, IsometricMap, Label, Scene, Sprite, Vector, vec } from "excalibur";
+import { Actor, Color, Font, FontUnit, IsometricEntityComponent, IsometricMap, Label, Scene, Sprite, Vector, vec } from "excalibur";
 import { MonsterSpriteSheet, Resources, TilesSpriteSheet } from "./resources";
 import { Unit, UnitType } from "./unit";
 
@@ -49,7 +49,8 @@ export class PuzzleGrid {
     public goalFont = new Font({
         family: 'sans-serif',
         size: 24,
-        unit: FontUnit.Px
+        unit: FontUnit.Px,
+        color: Color.White
     });
 
     public highlight: Actor;

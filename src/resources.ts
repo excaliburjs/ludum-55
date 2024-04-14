@@ -1,4 +1,4 @@
-import { ImageSource, Loader, Sound, SpriteSheet } from "excalibur";
+import { Color, FontSource, ImageSource, Loader, Sound, SpriteSheet } from "excalibur";
 
 import swordPng from "./images/template-sample-image-sword.png";
 import tilesPng from "./images/isometric-tiles.png";
@@ -149,6 +149,7 @@ export const MonsterSpriteSheet = SpriteSheet.fromImageSource({
 });
 
 export const loader = new Loader();
+loader.backgroundColor = '#420020';
 
 for (let res of Object.values(Resources)) {
   loader.addResource(res);

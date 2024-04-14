@@ -10,6 +10,7 @@ import {
   FadeInOut,
   Transition,
   SceneActivationContext,
+  Color,
 } from "excalibur";
 import { PuzzleGrid } from "../puzzle-grid";
 import { Unit } from "../unit";
@@ -34,7 +35,7 @@ export class Level extends Scene {
 
   onInitialize(engine: Engine<any>): void {
     SoundManager.startBackgroundMusic();
-
+    this.backgroundColor = Color.Black;
     this.inventory = document.getElementsByTagName(
       "app-inventory"
     )[0]! as Inventory;

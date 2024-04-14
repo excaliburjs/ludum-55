@@ -24,6 +24,6 @@ const game = new Engine({
 });
 
 game.start("startScreen", {
-  inTransition: new FadeInOut({ direction: "in", color: Color.ExcaliburBlue, duration: 1000 }),
+  inTransition: new FadeInOut({ direction: "in", color: Color.fromHex('#420020'), duration: 1000 }),
   loader,
 });
