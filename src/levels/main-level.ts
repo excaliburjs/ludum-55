@@ -152,6 +152,7 @@ export class Level extends Scene {
             this.currentSelection = null;
         }
         unit.addComponent(new IsometricEntityComponent(this.puzzleGrid.iso));
+        unit.get(IsometricEntityComponent).elevation = 3;
         this.currentSelection = unit;
         this.add(unit);
     }

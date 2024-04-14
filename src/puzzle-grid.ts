@@ -1,6 +1,6 @@
 import { Actor, Font, FontUnit, IsometricEntityComponent, IsometricMap, Label, Scene, Sprite, Vector, vec } from "excalibur";
-import { Resources, TilesSpriteSheet } from "./resources";
-import { Unit } from "./unit";
+import { MonsterSpriteSheet, Resources, TilesSpriteSheet } from "./resources";
+import { Unit, UnitType } from "./unit";
 
 
 export interface PuzzleGridOptions {
@@ -12,11 +12,27 @@ export interface PuzzleGridOptions {
     }
 }
 
+const ValueHintSprite: Record<UnitType, Sprite> = {
+    dragon: MonsterSpriteSheet.getSprite(4, 2),
+    orc: MonsterSpriteSheet.getSprite(3, 2),
+    goblin: MonsterSpriteSheet.getSprite(2, 2),
+    kobold: MonsterSpriteSheet.getSprite(1, 2),
+    rat: MonsterSpriteSheet.getSprite(0, 2),
+    knight: MonsterSpriteSheet.getSprite(0, 3),
+    archer: MonsterSpriteSheet.getSprite(1, 3),
+    wall: MonsterSpriteSheet.getSprite(2, 3),
+    pit: MonsterSpriteSheet.getSprite(2, 3),
+    rubble: MonsterSpriteSheet.getSprite(2, 3),
+} as const;
+
 export class PuzzleGrid {
 
     private grassTile: Sprite;
     private highlightSprite: Sprite;
     private unplaceableHighlightSprite: Sprite;
+
+    private valueHint: Actor;
+
     public iso: IsometricMap;
 
 
@@ -52,12 +68,25 @@ export class PuzzleGrid {
         this.grassTile = TilesSpriteSheet.getSprite(0, 0);
         this.highlightSprite = TilesSpriteSheet.getSprite(1, 0);
         this.unplaceableHighlightSprite = TilesSpriteSheet.getSprite(2, 0);
+
+
+        this.valueHint = new Actor({
+            width: 64,
+            height: 64,
+            anchor: vec(0.5, 1)
+        });
+        this.valueHint.addComponent(new IsometricEntityComponent(this.iso));
+        this.valueHint.get(IsometricEntityComponent).elevation = 4;
+        this.valueHint.graphics.visible = false;
+        scene.add(this.valueHint);
+
         this.highlight = new Actor({
             width: 64,
             height: 64,
             anchor: vec(0.5, 1)
         });
         this.highlight.addComponent(new IsometricEntityComponent(this.iso));
+        this.highlight.get(IsometricEntityComponent).elevation = 2;
         this.highlight.graphics.use(this.highlightSprite);
         this.highlight.graphics.visible = false;
         scene.add(this.highlight);
@@ -74,14 +103,13 @@ export class PuzzleGrid {
         this.dimension = dimension;
         this.grid = new Array(dimension * dimension).fill(null);
 
-        
-
         for (let tile of this.iso.tiles) {
             tile.addGraphic(this.grassTile);
         }
 
         scene.add(this.iso);
 
+        // Draw totals
         for (let [index, columnGoal] of this.goals.columns.entries()) {
             
             const rightMostTile = this.iso.getTile(dimension - 1, index);
@@ -115,6 +143,10 @@ export class PuzzleGrid {
         return !!this.grid[x + y * this.dimension]?.config.fixed;
     }
 
+    getType(x: number, y: number) {
+        return this.grid[x + y * this.dimension]?.config.type;
+    }
+
     showHighlight(pos: Vector) {
         const tile = this.iso.getTileByPoint(pos.add(vec(0, 32)));
         if (tile) {
@@ -123,8 +155,18 @@ export class PuzzleGrid {
             } else {
                 this.highlight.graphics.use(this.highlightSprite);
             }
+            const type = this.getType(tile.x, tile.y);
+            if (type) {
+                this.valueHint.graphics.use(ValueHintSprite[type]);
+                this.valueHint.graphics.visible = true;
+                this.valueHint.pos = tile.pos;
+                this.valueHint.graphics.offset = vec(0, -16);
+            } else {
+                this.valueHint.graphics.visible = false;
+            }
             this.highlight.graphics.visible = true;
-            this.highlight.pos = tile.pos.add(vec(0, 32));
+            this.highlight.pos = tile.pos;
+            this.highlight.graphics.offset = vec(0, 32);
         } else {
             this.hideHighlight();
         }
@@ -137,8 +179,18 @@ export class PuzzleGrid {
             } else {
                 this.highlight.graphics.use(this.highlightSprite);
             }
+            const type = this.getType(tile.x, tile.y);
+            if (type) {
+                this.valueHint.graphics.use(ValueHintSprite[type]);
+                this.valueHint.graphics.visible = true;
+                this.valueHint.pos = tile.pos;
+                this.valueHint.graphics.offset = vec(0, -16);
+            } else {
+                this.valueHint.graphics.visible = false;
+            }
             this.highlight.graphics.visible = true;
-            this.highlight.pos = tile.pos.add(vec(0, 32));
+            this.highlight.pos = tile.pos;
+            this.highlight.graphics.offset = vec(0, 32);
         } else {
             this.hideHighlight();
         }
@@ -158,6 +210,7 @@ export class PuzzleGrid {
     }
 
     hideHighlight() {
+        this.valueHint.graphics.visible = false;
         this.highlight.graphics.visible = false;
     }
 
@@ -204,12 +257,12 @@ export class PuzzleGrid {
         }
 
         if (tile && !this.grid[x + y * this.dimension]) {
+            unit.pos = tile.pos;
             if (unit.config.value !== 0) {
-                unit.pos = tile.pos.add(vec(0, -8));
-            } else {
-                unit.pos = tile.pos;
+                unit.graphics.offset = vec(0, -8);
             }
             unit.addComponent(new IsometricEntityComponent(this.iso));
+            unit.get(IsometricEntityComponent).elevation = 3;
             this.scene.add(unit);
             this.grid[x + y * this.dimension] = unit;
             return true;
