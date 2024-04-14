@@ -15,6 +15,7 @@ import { Unit } from "../unit";
 import { Inventory } from "../inventory";
 import { buildPuzzle, calculateInventory } from "../puzzle-builder";
 import { SoundManager } from "../sound-manager";
+import { SfxrSounds } from "../resources";
 
 export class Level extends Scene {
   puzzleGrid: PuzzleGrid;
@@ -74,6 +75,7 @@ export class Level extends Scene {
           if (success) {
             this.currentSelection = null;
             this.checkSolution();
+            SfxrSounds.place.play!();
           }
         }
       }

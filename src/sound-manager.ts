@@ -1,6 +1,7 @@
 import { Sound } from "excalibur";
+import { JsfxrResource } from "@excaliburjs/plugin-jsfxr";
 import classNames from "classnames";
-import { Resources } from "./resources";
+import { Resources, SfxrSounds } from "./resources";
 import { Preferences, savePreferences } from "./preferences";
 import Config from "./config";
 
@@ -12,6 +13,17 @@ export class SoundManager {
   }
 
   static init() {
+    const sndPlugin = new JsfxrResource();
+    sndPlugin.init();
+
+    for (const sound in SfxrSounds) {
+      const soundConfig = SfxrSounds[sound];
+      soundConfig.play = () => {
+        sndPlugin.playSound(sound);
+      };
+      sndPlugin.loadSoundConfig(sound, soundConfig);
+    }
+
     SoundManager.setSoundSpecificVolume();
     if (Preferences.muteBackgroundMusic) {
       SoundManager.muteBackgroundMusic();

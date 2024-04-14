@@ -7,6 +7,7 @@ import { Level } from "./levels/main-level";
 import "./inventory";
 
 loadPreferences();
+SoundManager.init();
 
 const game = new Engine({
   width: 800,
@@ -20,11 +21,7 @@ const game = new Engine({
   },
 });
 
-game
-  .start("introLevel", {
-    inTransition: new FadeInOut({ direction: "in", duration: 2000 }),
-    loader,
-  })
-  .then(() => {
-    SoundManager.init();
-  });
+game.start("introLevel", {
+  inTransition: new FadeInOut({ direction: "in", duration: 2000 }),
+  loader,
+});

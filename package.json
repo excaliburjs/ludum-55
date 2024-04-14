@@ -10,6 +10,7 @@
     "serve": "serve dist/"
   },
   "dependencies": {
+    "@excaliburjs/plugin-jsfxr": "^0.29.4",
     "classnames": "2.5.1",
     "excalibur": "0.29.2",
     "lit": "3.1.2",
