@@ -1,5 +1,6 @@
 import { LitElement, html, css, PropertyValueMap } from 'lit';
 import { customElement, property } from 'lit/decorators.js'
+import {styleMap} from 'lit/directives/style-map.js';
 
 import monsterSheetPng from './images/monsters.png';
 import { Level } from './levels/main-level';
@@ -96,6 +97,13 @@ export class Inventory extends LitElement {
         super();
     }
 
+    visible: boolean = false;
+
+    toggleVisible(visible: boolean) {
+        this.visible = visible;
+        this.requestUpdate();
+    }
+
     setInventoryConfig(config: InventoryConfig) {
         this.counts = config;
         this.requestUpdate();
@@ -135,7 +143,9 @@ export class Inventory extends LitElement {
 
     render() {
         return html`
-        <div class="container">
+        <div class="container" style=${styleMap({
+            visibility: this.visible ? 'visible' : 'hidden'
+        })}>
             <h2>Summons</h2>
             <ul>
                 ${Object.entries(this.counts).map(([type, count]) => count > 0 ? html`

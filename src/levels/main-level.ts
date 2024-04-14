@@ -9,6 +9,7 @@ import {
   clamp,
   FadeInOut,
   Transition,
+  SceneActivationContext,
 } from "excalibur";
 import { PuzzleGrid } from "../puzzle-grid";
 import { Unit } from "../unit";
@@ -40,9 +41,16 @@ export class Level extends Scene {
     this.inventory.setLevel(this);
     let inventory = calculateInventory(this.level, this);
     this.inventory.setInventoryConfig(inventory);
+    
     this.input.pointers.on("move", this.moveSelection);
     this.input.pointers.on("down", this.placeSelection);
     this.input.keyboard.on("press", this.keyboardDown);
+  }
+  onActivate(context: SceneActivationContext<unknown>): void {
+    this.inventory.toggleVisible(true);
+  }
+  onDeactivate(context: SceneActivationContext<undefined>): void {
+    this.inventory.toggleVisible(false);
   }
 
   moveSelection = (evt: PointerEvent) => {
