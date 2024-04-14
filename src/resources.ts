@@ -4,12 +4,14 @@ import swordPng from './images/template-sample-image-sword.png';
 import tilesPng from './images/isometric-tiles.png';
 import monsterPng from './images/monsters.png';
 import projectileMp3 from './sounds/template-sample-sound-projectile.mp3';
+import backgroundMusicMp3 from './sounds/background.mp3';
 
 export const Resources = {
     Sword: new ImageSource(swordPng),
     TilesSheetImage: new ImageSource(tilesPng),
     MonsterSheetImage: new ImageSource(monsterPng),
-    ProjectileSound: new Sound(projectileMp3)
+    ProjectileSound: new Sound(projectileMp3),
+    BackgroundMusic: new Sound(backgroundMusicMp3)
 } as const;
 
 export const TilesSpriteSheet = SpriteSheet.fromImageSource({

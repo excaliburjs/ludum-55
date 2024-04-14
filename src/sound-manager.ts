@@ -4,10 +4,11 @@ import { Resources } from "./resources";
 import { Preferences, savePreferences } from "./preferences";
 import Config from "./config";
 
+const BackgroundMusicVolume = 0.1;
+
 export class SoundManager {
   static setSoundSpecificVolume() {
-    // Example
-    // Resources.Clank.volume = 0.5;
+    Resources.BackgroundMusic.volume = BackgroundMusicVolume;
   }
 
   static init() {
@@ -70,17 +71,25 @@ export class SoundManager {
   }
 
   static startBackgroundMusic() {
+    Resources.BackgroundMusic.loop = true;
+
     // start bg music
+    if (!Resources.BackgroundMusic.isPlaying()) {
+      Resources.BackgroundMusic.play(BackgroundMusicVolume);
+    }
   }
 
   static stopBackgroundMusic() {
     // stop bg music
+    Resources.BackgroundMusic.loop = false;
+    Resources.BackgroundMusic.stop();
   }
 
   static muteBackgroundMusic() {
     Preferences.muteBackgroundMusic = true;
 
     // mute bg music
+    Resources.BackgroundMusic.volume = 0;
 
     SoundManager._updateMusicButton();
   }
@@ -89,6 +98,7 @@ export class SoundManager {
     Preferences.muteBackgroundMusic = false;
 
     // unmute bg music
+    Resources.BackgroundMusic.volume = BackgroundMusicVolume;
 
     SoundManager._updateMusicButton();
   }
