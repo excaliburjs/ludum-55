@@ -67,11 +67,6 @@ export class Level extends Scene {
   
   placeSelectionOnTile = (x: number, y: number): boolean => {
     if (this.currentSelection) {
-      const previousUnit = this.puzzleGrid.getUnit(x, y);
-      if (!!previousUnit && !previousUnit.config.fixed) {
-        this.puzzleGrid.clearCell(x, y);
-        SfxrSounds.remove.play();
-      }
       const unitType = this.currentSelection.config.type;
       const success = this.puzzleGrid.addUnit(this.currentSelection, x, y);
         if (success) {
@@ -99,6 +94,11 @@ export class Level extends Scene {
         const tileCoord = this.puzzleGrid.getTileCoord(evt.worldPos);
         if (tileCoord) {
           const previousUnit = this.puzzleGrid.getUnit(tileCoord.x, tileCoord.y);
+          if (!!previousUnit && !previousUnit.config.fixed) {
+            this.puzzleGrid.clearCell(tileCoord.x, tileCoord.y);
+            SfxrSounds.remove.play();
+          }
+
           this.placeSelectionOnTile(tileCoord.x, tileCoord.y);
           if (!!previousUnit && !previousUnit.config.fixed) {
             this.selectUnit(previousUnit);
@@ -113,6 +113,10 @@ export class Level extends Scene {
     placeUnitWithKeyboard = () => {
       if(!this.currentSelection) return;
       const previousUnit = this.puzzleGrid.getUnit(this.currentSelectedCoordinate.x, this.currentSelectedCoordinate.y);
+      if (!!previousUnit && !previousUnit.config.fixed) {
+        this.puzzleGrid.clearCell(this.currentSelectedCoordinate.x, this.currentSelectedCoordinate.y);
+        SfxrSounds.remove.play();
+      }
       this.placeSelectionOnTile(this.currentSelectedCoordinate.x, this.currentSelectedCoordinate.y)
       if(!!previousUnit && !previousUnit.config.fixed) this.inventory.addToInventory(previousUnit?.config.type);
     };
