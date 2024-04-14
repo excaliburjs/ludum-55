@@ -12,7 +12,7 @@ export interface PuzzleGridOptions {
     }
 }
 
-const ValueHintSprite: Record<UnitType, Sprite> = {
+export const ValueHintSprite: Record<UnitType, Sprite> = {
     dragon: MonsterSpriteSheet.getSprite(3, 2),
     orc: MonsterSpriteSheet.getSprite(2, 2),
     goblin: MonsterSpriteSheet.getSprite(1, 2),
