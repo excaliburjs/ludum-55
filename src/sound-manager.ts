@@ -1,5 +1,5 @@
 import { Sound } from "excalibur";
-import { JsfxrResource } from "@excaliburjs/plugin-jsfxr";
+import { JsfxrResource, SoundConfig } from "@excaliburjs/plugin-jsfxr";
 import classNames from "classnames";
 import { Resources, SfxrSounds } from "./resources";
 import { Preferences, savePreferences } from "./preferences";

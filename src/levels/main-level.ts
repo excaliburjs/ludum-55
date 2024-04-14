@@ -65,7 +65,7 @@ export class Level extends Scene {
           this.puzzleGrid.clearCell(tileCoord.x, tileCoord.y);
           this.inventory.addToInventory(previousUnit.config.type);
           this.checkSolution();
-          SfxrSounds.remove.play!();
+          SfxrSounds.remove.play();
         }
         if (this.currentSelection) {
           const success = this.puzzleGrid.addUnit(
@@ -76,7 +76,7 @@ export class Level extends Scene {
           if (success) {
             this.currentSelection = null;
             this.checkSolution();
-            SfxrSounds.place.play!();
+            SfxrSounds.place.play();
           }
         }
       }
@@ -87,6 +87,7 @@ export class Level extends Scene {
     if (this.puzzleGrid.checkSolved()) {
       const nextLevel = this.level + 1;
       const sceneKey = `level ${nextLevel}`;
+      SfxrSounds.clearPuzzle.play();
       this.engine.addScene(sceneKey, new Level(nextLevel));
       this.engine.goToScene(sceneKey, {
         destinationIn: new FadeInOut({ direction: "in", duration: 2000 }),
