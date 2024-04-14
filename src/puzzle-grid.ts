@@ -282,16 +282,21 @@ export class PuzzleGrid {
             for (let y = 0; y < this.dimension; y++) {
                 rowSum += this.grid[x + y * this.dimension]?.config.value ?? 0
             }
-            this.rowLabels[x].text = (this.goals.rows[x] - rowSum).toString();
-           if (rowSum != this.goals.rows[x]) solved = false;
+            //this.rowLabels[x].text = (this.goals.rows[x] - rowSum).toString();
+
+            if (rowSum !== this.goals.rows[x]) {
+                solved = solved && false;
+            } 
         }
         for (let y = 0; y < this.dimension; y++) {
             let colSum = 0;
             for (let x = 0; x < this.dimension; x++) {
                 colSum += this.grid[x + y * this.dimension]?.config.value ?? 0
             }
-            this.columnLabels[y].text = (this.goals.columns[y] - colSum).toString();
-            if (colSum != this.goals.columns[y]) solved = false;
+            //this.columnLabels[y].text = (this.goals.columns[y] - colSum).toString();
+            if (colSum != this.goals.columns[y]) {
+                solved = solved && false;
+            }
         }
         return solved;
     }
