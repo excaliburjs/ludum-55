@@ -97,11 +97,11 @@ export class Level extends Scene {
     placeUnitWithPointer = (evt: PointerEvent) => {
       if (this.puzzleGrid.validTile(evt.worldPos)) {
         const tileCoord = this.puzzleGrid.getTileCoord(evt.worldPos);
-        // TODO unify this logic so you can do it with keyboard also
         if (tileCoord) {
           const previousUnit = this.puzzleGrid.getUnit(tileCoord.x, tileCoord.y);
           this.placeSelectionOnTile(tileCoord.x, tileCoord.y);
           if (!!previousUnit && !previousUnit.config.fixed) {
+            this.puzzleGrid.clearCell(tileCoord.x, tileCoord.y);
             this.selectUnit(previousUnit);
           }
         }
