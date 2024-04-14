@@ -65,18 +65,15 @@ export class Level extends Scene {
     }
   };
   
-  placeSelectionOnTile = (x: number, y: number) => {
+  placeSelectionOnTile = (x: number, y: number): boolean => {
     if (this.currentSelection) {
-      
       const previousUnit = this.puzzleGrid.getUnit(x, y);
       if (!!previousUnit && !previousUnit.config.fixed) {
         this.puzzleGrid.clearCell(x, y);
         SfxrSounds.remove.play();
       }
-      
       const unitType = this.currentSelection.config.type;
-      const success = this.puzzleGrid.addUnit(
-        this.currentSelection, x, y);
+      const success = this.puzzleGrid.addUnit(this.currentSelection, x, y);
         if (success) {
           this.currentSelection = null;
           this.checkSolution();
@@ -92,7 +89,9 @@ export class Level extends Scene {
           
           SfxrSounds.place.play();
         }
+        return success;
       }
+      return false;
     }
     
     placeUnitWithPointer = (evt: PointerEvent) => {
@@ -113,6 +112,7 @@ export class Level extends Scene {
     };
     
     placeUnitWithKeyboard = () => {
+      if(!this.currentSelection) return;
       const previousUnit = this.puzzleGrid.getUnit(this.currentSelectedCoordinate.x, this.currentSelectedCoordinate.y);
       this.placeSelectionOnTile(this.currentSelectedCoordinate.x, this.currentSelectedCoordinate.y)
       if(!!previousUnit && !previousUnit.config.fixed) this.inventory.addToInventory(previousUnit?.config.type);
