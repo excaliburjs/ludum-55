@@ -195,7 +195,11 @@ export class Level extends Scene {
         this.placeUnitWithKeyboard();
         break;
       }
-
+      case Keys.Delete:
+      case Keys.Backspace:{
+        this.clearCellWithKeyboard();
+        break;
+      }
       case Keys.Esc: {
         this.cancelSelection();
         break;
