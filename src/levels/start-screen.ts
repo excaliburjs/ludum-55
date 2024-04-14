@@ -14,7 +14,7 @@ export class StartScreen extends Scene {
         this.summonCircle = new Actor({
             pos: vec(400, 300),
             coordPlane: CoordPlane.Screen,
-            angularVelocity: 0.1
+            angularVelocity: 0.05
         });
         this.summonCircle.graphics.add(Resources.LargeSummonCircleImage.toSprite());
         this.add(this.summonCircle);
