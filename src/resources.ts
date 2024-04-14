@@ -31,7 +31,14 @@ export const Resources = {
  *
  * Copy serialized code
  */
-export const SfxrSounds: Record<string, PlayableSfxrSoundConfig> = {
+const sounds = {
+  place: "place",
+  remove: "remove",
+  clearPuzzle: "clearPuzzle",
+}as const;
+type TypeOfSounds = keyof typeof sounds;
+
+export const SfxrSounds: Record<TypeOfSounds, PlayableSfxrSoundConfig> = {
   place: {
     oldParams: true,
     wave_type: 1,

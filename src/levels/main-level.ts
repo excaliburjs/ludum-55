@@ -84,12 +84,16 @@ export class Level extends Scene {
         const previousUnit = this.puzzleGrid.getUnit(tileCoord.x, tileCoord.y);
         if (!!previousUnit && !previousUnit.config.fixed) {
           this.puzzleGrid.clearCell(tileCoord.x, tileCoord.y);
-          this.inventory.addToInventory(previousUnit.config.type);
-          this.checkSolution();
           SfxrSounds.remove.play();
         }
         this.placeSelectionOnTile(tileCoord.x, tileCoord.y);
+        if (!!previousUnit) {
+          this.selectUnit(previousUnit);
+        }
       }
+    } else {
+      this.cancelSelection();
+      SfxrSounds.remove.play();
     }
   };
 
