@@ -28,6 +28,7 @@ export class Inventory extends LitElement {
             }
 
             .container {
+                pointer-events: none;
                 display: block;
                 background-color: #000000aa;
                 border-radius: 5px;
@@ -45,6 +46,7 @@ export class Inventory extends LitElement {
 
             button {
                 all: unset;
+                pointer-events: all;
                 cursor: pointer;
                 border-radius: 5px;
                 background-color: #1e1e1e;
