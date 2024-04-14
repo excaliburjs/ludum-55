@@ -1,7 +1,7 @@
 import { Actor, Graphic, IsometricEntityComponent, Vector, vec } from "excalibur";
 import { MonsterSpriteSheet, TilesSpriteSheet } from "./resources";
 
-export type UnitType = 'dragon' | 'orc' | 'goblin' | 'kobold' | 'rat' | 'knight' | 'archer' | 'wall' | 'pit' | 'rubble'
+export type UnitType = 'dragon' | 'orc' | 'goblin' | 'rat' | 'knight' | 'archer' | 'wall' | 'pit' | 'rubble'
 
 export interface UnitConfig {
     type: UnitType;
@@ -13,23 +13,18 @@ export interface UnitConfig {
 export const UnitsConfig: Record<UnitType, UnitConfig> = {
     dragon: {
         type: 'dragon',
-        value: 9,
+        value: 5,
         graphic: MonsterSpriteSheet.getSprite(3, 0)
     },
     orc: {
         type: 'orc',
-        value: 5,
+        value: 3,
         graphic: MonsterSpriteSheet.getSprite(2, 0)
     },
     goblin: {
         type: 'goblin',
-        value: 3,
-        graphic: MonsterSpriteSheet.getSprite(1, 0)
-    },
-    kobold: {
-        type: 'kobold',
         value: 2,
-        graphic: MonsterSpriteSheet.getSprite(4, 0)
+        graphic: MonsterSpriteSheet.getSprite(1, 0)
     },
     rat: {
         type: 'rat',

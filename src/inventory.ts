@@ -13,7 +13,6 @@ export class Inventory extends LitElement {
         dragon: 0,
         orc: 0,
         goblin: 0,
-        kobold: 0,
         rat: 0,
         knight: 0,
         archer: 0
@@ -77,9 +76,6 @@ export class Inventory extends LitElement {
 
             .dragon {
                 background-position: calc(32px * -3) 0;
-            }
-            .kobold {
-                background-position: calc(32px * -4) 0;
             }
             .orc {
                 background-position: calc(32px * -2) 0;

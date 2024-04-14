@@ -70,7 +70,6 @@ export function calculateInventory(puzzleIndex: number, level: Level): Inventory
         dragon: 0,
         orc: 0,
         goblin: 0,
-        kobold: 0,
         rat: 0
     };
 

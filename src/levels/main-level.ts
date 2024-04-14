@@ -165,24 +165,18 @@ export class Level extends Scene {
       }
       case Keys.Digit2:
       case Keys.Numpad2: {
-        this.inventory.onSelection("kobold")();
+        this.inventory.onSelection("goblin")();
         placeUnitWithKeyboard();
         break;
       }
       case Keys.Digit3:
       case Keys.Numpad3: {
-        this.inventory.onSelection("goblin")();
+        this.inventory.onSelection("orc")();
         placeUnitWithKeyboard();
         break;
       }
       case Keys.Digit5:
       case Keys.Numpad5: {
-        this.inventory.onSelection("orc")();
-        placeUnitWithKeyboard();
-        break;
-      }
-      case Keys.Digit9:
-      case Keys.Numpad9: {
         this.inventory.onSelection("dragon")();
         placeUnitWithKeyboard();
         break;
