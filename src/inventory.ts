@@ -6,6 +6,7 @@ import monsterSheetPng from './images/monsters.png';
 import { Level } from './levels/main-level';
 import { Unit, UnitType, UnitsConfig } from './unit';
 import { Vector } from 'excalibur';
+import { SfxrSounds } from './resources';
 
 export type InventoryConfig = Record<UnitType, number>;
 
@@ -142,7 +143,7 @@ export class Inventory extends LitElement {
         container.style.setProperty('--monster-image-path', `url(${monsterSheetPng})`);
     }
 
-    
+
 
     onSelection = (type: UnitType) => {
         return () => {
@@ -153,6 +154,7 @@ export class Inventory extends LitElement {
                 }
                 this.level.selectUnit(unit);
                 this.counts[type]--;
+                SfxrSounds.selectInventory.play();
                 this.requestUpdate();
                 this.dispatchEvent(new CustomEvent('selection', { detail: type}));
             }

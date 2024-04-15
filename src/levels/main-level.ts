@@ -57,7 +57,7 @@ export class Level extends Scene {
     summonerStaffIdleAnim!: Animation;
     summonerSummonUnitAnim!: Animation;
 
-    background: Actor;
+    background!: Actor;
     backgroundAnim!: Animation;
 
     constructor(private level: number = 0) {
