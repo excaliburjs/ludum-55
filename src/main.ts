@@ -20,6 +20,7 @@ const game = new Engine({
   displayMode: DisplayMode.FitScreen,
   pixelArt: true,
   pixelRatio: 2,
+  physics: false,
   scenes: {
     startScreen: StartScreen,
     tutorial: Tutorial,
