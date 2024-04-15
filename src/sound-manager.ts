@@ -49,6 +49,9 @@ export class SoundManager {
       savePreferences();
       return false;
     });
+
+    SoundManager._updateMusicButton();
+    SoundManager._updateMuteAllButton();
   }
 
   static muteAll() {
