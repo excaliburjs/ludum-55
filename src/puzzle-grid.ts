@@ -116,9 +116,11 @@ export class PuzzleGrid {
             const pos = this.iso.tileToWorld(vec(dimension, index));
             const label = new Label({
                 text: columnGoal.toString(),
-                font: this.goalFont,
-                z: 99
+                font: this.goalFont
             });
+
+            label.addComponent(new IsometricEntityComponent(this.iso));
+            label.get(IsometricEntityComponent).elevation = 5;
 
             label.pos = pos.add(vec(-16, -16));
             scene.add(label);
@@ -129,9 +131,12 @@ export class PuzzleGrid {
             const pos = this.iso.tileToWorld(vec(index, dimension));
             const label = new Label({
                 text: rowGoal.toString(),
-                font: this.goalFont,
-                z: 99
+                font: this.goalFont
             });
+
+            label.addComponent(new IsometricEntityComponent(this.iso));
+            label.get(IsometricEntityComponent).elevation = 5;
+
             label.pos = pos.add(vec(16, -16));
             scene.add(label);
             this.rowLabels.push(label);
