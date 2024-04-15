@@ -140,8 +140,10 @@ export class Level extends Scene {
                 }
             }
         } else {
+            if(!!this.currentSelection) {
+                SfxrSounds.remove.play() 
+            }
             this.cancelSelection();
-            SfxrSounds.remove.play();
         }
         this.summoner.graphics.material = null;
     };
