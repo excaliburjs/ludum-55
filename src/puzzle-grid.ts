@@ -3,6 +3,7 @@ import {
   Actor,
   Color,
   EasingFunctions,
+  EventEmitter,
   FontUnit,
   IsometricEntityComponent,
   IsometricMap,
@@ -43,6 +44,7 @@ export const ValueHintSprite: Record<UnitType, Sprite> = {
 } as const;
 
 export class PuzzleGrid {
+  public events = new EventEmitter();
   private random: Random;
 
   public groundTiles: GroundTilePair[];
@@ -440,5 +442,17 @@ export class PuzzleGrid {
       }
     }
     return solved;
+  }
+
+  dispose() {
+    this.scene.remove(this.iso);
+    for(let i = 0; i < this.grid.length; i++) {
+      const maybeUnit = this.grid[i];
+      if (maybeUnit) {
+        this.scene.remove(maybeUnit);
+      }
+    }
+    this.rowLabels.forEach(l => this.scene.remove(l));
+    this.columnLabels.forEach(c => this.scene.remove(c));
   }
 }

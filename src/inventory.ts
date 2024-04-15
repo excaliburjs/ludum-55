@@ -142,6 +142,8 @@ export class Inventory extends LitElement {
         container.style.setProperty('--monster-image-path', `url(${monsterSheetPng})`);
     }
 
+    
+
     onSelection = (type: UnitType) => {
         return () => {
             if (this.counts[type] > 0) {
@@ -152,6 +154,7 @@ export class Inventory extends LitElement {
                 this.level.selectUnit(unit);
                 this.counts[type]--;
                 this.requestUpdate();
+                this.dispatchEvent(new CustomEvent('selection', { detail: type}));
             }
         }
     }

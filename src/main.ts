@@ -8,6 +8,7 @@ import Config from "./config";
 
 import "./inventory"; // lit component
 import { EndScreen } from "./levels/end-screen";
+import { Tutorial } from "./levels/tutorial";
 
 loadPreferences();
 SoundManager.init();
@@ -21,6 +22,7 @@ const game = new Engine({
   pixelRatio: 2,
   scenes: {
     startScreen: StartScreen,
+    tutorial: Tutorial,
     introLevel: new Level(Config.startingPuzzle),
     endScreen: EndScreen
   },

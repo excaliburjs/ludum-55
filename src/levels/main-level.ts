@@ -46,7 +46,7 @@ export class Level extends Scene {
     summoner!: Actor;
     rainbowMaterial!: Material;
 
-    constructor(private level: number) {
+    constructor(private level: number = 0) {
         super();
         this.puzzleGrid = buildPuzzle(level, this);
 

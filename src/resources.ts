@@ -13,6 +13,7 @@ import titleTextPng from './images/sum-logo.png';
 import playNowTextPng from './images/playnow.png';
 
 import summonerIdleAseprite from './images/SummonerSpriteStart.aseprite';
+import gloveAseprite from './images/glove.aseprite';
 
 import projectileMp3 from "./sounds/template-sample-sound-projectile.mp3";
 import backgroundMusicMp3 from "./sounds/background_1_loopable.mp3"
@@ -30,6 +31,7 @@ export const Resources = {
   TitleTextImage: new ImageSource(titleTextPng),
   PlayNowImage: new ImageSource(playNowTextPng),
   SummonerIdle: new AsepriteResource(summonerIdleAseprite),
+  Glove: new AsepriteResource(gloveAseprite),
   ProjectileSound: new Sound(projectileMp3),
   BackgroundMusic: new Sound(backgroundMusicMp3),
 } as const;

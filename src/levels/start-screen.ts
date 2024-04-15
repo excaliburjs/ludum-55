@@ -71,8 +71,8 @@ export class StartScreen extends Scene {
     }
 
     onActivate(context: SceneActivationContext<unknown>): void {
-        this.input.pointers.once('down', () => this.engine.goToScene('introLevel'));
-        this.input.keyboard.once('press', () => this.engine.goToScene('introLevel'));
+        this.input.pointers.once('down', () => this.engine.goToScene('tutorial'));
+        this.input.keyboard.once('press', () => this.engine.goToScene('tutorial'));
     }
 
 
