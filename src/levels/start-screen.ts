@@ -1,4 +1,4 @@
-import { Actor, Color, CoordPlane, Engine, Scene, coroutine, vec } from "excalibur";
+import { Actor, Color, CoordPlane, Engine, Scene, SceneActivationContext, coroutine, vec } from "excalibur";
 import { Resources } from "../resources";
 
 
@@ -68,9 +68,11 @@ export class StartScreen extends Scene {
                 }
             }
         });
+    }
 
-        this.input.pointers.on('down', () => engine.goToScene('introLevel'));
-        this.input.keyboard.on('press', () => engine.goToScene('introLevel'));
+    onActivate(context: SceneActivationContext<unknown>): void {
+        this.input.pointers.once('down', () => this.engine.goToScene('introLevel'));
+        this.input.keyboard.once('press', () => this.engine.goToScene('introLevel'));
     }
 
 

@@ -1,6 +1,6 @@
 import { LitElement, html, css, PropertyValueMap } from 'lit';
 import { customElement, property } from 'lit/decorators.js'
-import {styleMap} from 'lit/directives/style-map.js';
+import { styleMap } from 'lit/directives/style-map.js';
 
 import monsterSheetPng from './images/monsters.png';
 import { Level } from './levels/main-level';
@@ -128,10 +128,12 @@ export class Inventory extends LitElement {
 
     setInventoryPositionTopRight(pos: Vector) {
         const container = this.renderRoot.querySelector('.container') as HTMLElement;
-        const rect = container.getBoundingClientRect()
-        this.left = pos.x - rect.width;
-        this.top = pos.y;
-        this.requestUpdate();
+        if (container) {
+            const rect = container.getBoundingClientRect()
+            this.left = pos.x - rect.width;
+            this.top = pos.y;
+            this.requestUpdate();
+        }
     }
     
     override firstUpdated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
@@ -154,12 +156,13 @@ export class Inventory extends LitElement {
     }
 
     render() {
-        return html`
-        <div class="container" style=${styleMap({
+        const styles = {
             visibility: this.visible ? 'visible' : 'hidden',
             left: `${this.left}px`,
             top: `${this.top}px`
-        })}>
+        }
+        return html`
+        <div class="container" style=${styleMap(styles)}>
             <h2>Summons</h2>
             <ul>
                 ${Object.entries(this.counts).map(([type, count]) => count > 0 ? html`

@@ -21,6 +21,9 @@ function calculatePuzzleGoals(puzzleIndex: number) {
         rows: solutionRows,
     }
 }
+export function hasPuzzle(puzzleIndex: number): boolean {
+    return !!(Config.puzzles as any)[puzzleIndex];
+}
 
 function populatePuzzle(puzzleIndex: number, puzzleGrid: PuzzleGrid) {
     const puzzleArray = (Config.puzzles as any)[puzzleIndex].grid;
