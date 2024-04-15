@@ -1,5 +1,6 @@
 import { Actor, Color, CoordPlane, Engine, Scene, SceneActivationContext, coroutine, vec } from "excalibur";
 import { Resources } from "../resources";
+import Config from "../config";
 
 
 export class StartScreen extends Scene {
@@ -71,8 +72,13 @@ export class StartScreen extends Scene {
     }
 
     onActivate(context: SceneActivationContext<unknown>): void {
-        this.input.pointers.once('down', () => this.engine.goToScene('tutorial'));
-        this.input.keyboard.once('press', () => this.engine.goToScene('tutorial'));
+        if (!Config.skipTutorial) {
+            this.input.pointers.once('down', () => this.engine.goToScene('tutorial'));
+            this.input.keyboard.once('press', () => this.engine.goToScene('tutorial'));
+        } else {
+            this.input.pointers.once('down', () => this.engine.goToScene('introLevel'));
+            this.input.keyboard.once('press', () => this.engine.goToScene('introLevel'));
+        }
     }
 
 

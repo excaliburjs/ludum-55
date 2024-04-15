@@ -9,6 +9,8 @@ export default {
 
     showBoardHighlights: true,
 
+    skipTutorial: false,
+
     units: {
         opacityAfterPlacement: 0.75,
         monsters: {
