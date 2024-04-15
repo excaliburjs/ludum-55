@@ -238,9 +238,11 @@ export class PuzzleGrid {
     private adjustHighlightTilesInRowAndColumn(highlightTiles: boolean, rowIndex: number, columnIndex: number) {
         const newSpriteType = highlightTiles ? 'highlighted' : 'default';
         const currentSpriteType = highlightTiles ? 'default' : 'highlighted';
+        
         for (let i=0; i < this.dimension; i++) {
             const tile = this.iso.getTile(rowIndex, i)
-            if (tile) {
+            const tileType = this.getType(rowIndex, i);
+            if (tile && tileType !== 'pit') {
                 const randNumberKey = this.tileRandNumberMap.get(tile) || 0;
                 tile.addGraphic(this.groundTiles[randNumberKey][newSpriteType]);
                 tile.removeGraphic(this.groundTiles[randNumberKey][currentSpriteType]);
@@ -248,7 +250,8 @@ export class PuzzleGrid {
         }
         for (let i=0; i < this.dimension; i++) {
             const tile = this.iso.getTile(i, columnIndex)
-            if (tile) {
+            const tileType = this.getType(i, columnIndex);
+            if (tile && tileType !== 'pit') {
                 const randNumberKey = this.tileRandNumberMap.get(tile) || 0;
                 tile.addGraphic(this.groundTiles[randNumberKey][newSpriteType]);
                 tile.removeGraphic(this.groundTiles[randNumberKey][currentSpriteType]);
