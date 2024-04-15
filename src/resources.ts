@@ -41,7 +41,7 @@ const sounds = {
   remove: "remove",
   clearPuzzle: "clearPuzzle",
 }as const;
-type TypeOfSounds = keyof typeof sounds;
+type TypeOfSounds = (typeof sounds)[keyof typeof sounds];
 
 export const SfxrSounds: Record<TypeOfSounds, PlayableSfxrSoundConfig> = {
   place: {
