@@ -51,7 +51,14 @@ export class Level extends Scene {
         this.puzzleGrid = buildPuzzle(level, this);
 
         this.camera.zoom = 2;
-        this.camera.pos = this.puzzleGrid.iso.transform.pos.add(vec(0, 100));
+        const dimension = this.puzzleGrid.dimension;
+        const tile = this.puzzleGrid.iso.getTile(Math.floor(dimension / 2), Math.floor(dimension / 2));
+        if (tile) {
+            this.camera.pos =  tile.pos;
+            if (dimension > 3) {
+                this.camera.pos = this.camera.pos.add(vec(32, -16));
+            }
+        }
 
     }
 
@@ -76,11 +83,13 @@ export class Level extends Scene {
     }
 
     onActivate(context: SceneActivationContext<unknown>): void {
-        setWorldPixelConversion(this.engine);
-
         this.inventory.setLevel(this);
         let inventory = calculateInventory(this.level, this);
         this.inventory.setInventoryConfig(inventory);
+        setWorldPixelConversion(this.engine);
+        this.engine.clock.schedule(() => {
+            setWorldPixelConversion(this.engine);
+        });
         this.inventory.toggleVisible(true);
     }
 
