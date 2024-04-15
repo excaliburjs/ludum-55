@@ -19,7 +19,7 @@ import {
 import { PuzzleGrid, ValueHintSprite } from "../puzzle-grid";
 import { Unit } from "../unit";
 import { Inventory } from "../inventory";
-import { buildPuzzle, calculateInventory } from "../puzzle-builder";
+import { buildPuzzle, calculateInventory, hasPuzzle } from "../puzzle-builder";
 import { SoundManager } from "../sound-manager";
 import { Resources, SfxrSounds } from "../resources";
 
@@ -121,9 +121,6 @@ export class Level extends Scene {
             "app-inventory"
         )[0]! as Inventory;
         this.inventory.setLevel(this);
-        let inventory = calculateInventory(this.level, this);
-        this.inventory.setInventoryConfig(inventory);
-
         this.summoner = new Actor({
             pos: vec(720, 300),
             scale: vec(2, 2),
@@ -139,10 +136,13 @@ export class Level extends Scene {
     }
     onActivate(context: SceneActivationContext<unknown>): void {
         setWorldPixelConversion(this.engine);
+        let inventory = calculateInventory(this.level, this);
+        this.inventory.setInventoryConfig(inventory);
         this.inventory.toggleVisible(true);
     }
     onDeactivate(context: SceneActivationContext<undefined>): void {
         this.inventory.toggleVisible(false);
+        this.clearAllPlacedUnits();
     }
 
     moveSelection = (evt: PointerEvent) => {
@@ -225,16 +225,31 @@ export class Level extends Scene {
         }
     };
 
+    clearAllPlacedUnits() {
+        for (let i = 0; i < this.puzzleGrid.grid.length; i++) {
+            if(!this.puzzleGrid.grid[i]?.config.fixed) {
+                this.puzzleGrid.clearCell(i % this.puzzleGrid.dimension, Math.floor(i / this.puzzleGrid.dimension));
+            }
+        }
+    }
+
     checkSolution() {
         if (this.puzzleGrid.checkSolved()) {
             const nextLevel = this.level + 1;
-            const sceneKey = `level ${nextLevel}`;
             SfxrSounds.clearPuzzle.play();
-            this.engine.addScene(sceneKey, new Level(nextLevel));
-            this.engine.goToScene(sceneKey, {
-                destinationIn: new FadeInOut({ direction: "in", duration: 2000 }),
-                sourceOut: new FadeInOut({ direction: "out", duration: 2000 }),
-            });
+            if (hasPuzzle(nextLevel)) {
+                const sceneKey = `level ${nextLevel}`;
+                this.engine.addScene(sceneKey, new Level(nextLevel));
+                this.engine.goToScene(sceneKey, {
+                    destinationIn: new FadeInOut({ direction: "in", duration: 2000 }),
+                    sourceOut: new FadeInOut({ direction: "out", duration: 2000 }),
+                });
+            } else {
+                this.engine.goToScene('endScreen', {
+                    destinationIn: new FadeInOut({ direction: "in", duration: 2000 }),
+                    sourceOut: new FadeInOut({ direction: "out", duration: 2000 }),
+                });
+            }
         }
     }
 

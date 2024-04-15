@@ -6,7 +6,7 @@ import { Level, setWorldPixelConversion } from "./levels/main-level";
 import { StartScreen } from "./levels/start-screen";
 
 import "./inventory"; // lit component
-import { Inventory } from "./inventory";
+import { EndScreen } from "./levels/end-screen";
 
 loadPreferences();
 SoundManager.init();
@@ -21,6 +21,7 @@ const game = new Engine({
   scenes: {
     startScreen: StartScreen,
     introLevel: new Level(0),
+    endScreen: EndScreen
   },
 });
 
