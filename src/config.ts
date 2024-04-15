@@ -1,7 +1,6 @@
 
 export default {
-    SoundVolume: 0.5,
-    BackgroundAmbianceVolume: 0.5,
+    SoundVolume: 0.05,
     BackgroundMusicVolume: 0.5,
 
     valueHint:{

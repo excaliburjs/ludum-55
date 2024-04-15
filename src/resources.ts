@@ -1,6 +1,7 @@
 import { Color, FontSource, ImageSource, Loader, Sound, SpriteSheet } from "excalibur";
 import { SoundConfig } from "@excaliburjs/plugin-jsfxr";
 import { AsepriteResource } from "@excaliburjs/plugin-aseprite";
+import Config from "./config";
 
 import swordPng from "./images/template-sample-image-sword.png";
 import tilesPng from "./images/isometric-tiles.png";
@@ -69,7 +70,7 @@ export const SfxrSounds: Record<TypeOfSounds, PlayableSfxrSoundConfig> = {
     p_lpf_resonance: 0.24772115873303813,
     p_hpf_freq: 0.545696061417478,
     p_hpf_ramp: 0,
-    sound_vol: 0.25,
+    sound_vol: Config.SoundVolume,
     sample_rate: 44100,
     sample_size: 8,
   } as unknown as PlayableSfxrSoundConfig,
@@ -98,7 +99,7 @@ export const SfxrSounds: Record<TypeOfSounds, PlayableSfxrSoundConfig> = {
     p_lpf_resonance: 0.6665719860793264,
     p_hpf_freq: 0,
     p_hpf_ramp: 0.8418784889521622,
-    sound_vol: 0.25,
+    sound_vol: Config.SoundVolume,
     sample_rate: 44100,
     sample_size: 8,
   } as unknown as PlayableSfxrSoundConfig,
@@ -127,7 +128,7 @@ export const SfxrSounds: Record<TypeOfSounds, PlayableSfxrSoundConfig> = {
     p_lpf_resonance: 0,
     p_hpf_freq: 0,
     p_hpf_ramp: 0,
-    sound_vol: 0.25,
+    sound_vol: Config.SoundVolume,
     sample_rate: 44100,
     sample_size: 8,
   } as unknown as PlayableSfxrSoundConfig,

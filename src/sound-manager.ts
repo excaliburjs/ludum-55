@@ -5,11 +5,9 @@ import { Resources, SfxrSounds } from "./resources";
 import { Preferences, savePreferences } from "./preferences";
 import Config from "./config";
 
-const BackgroundMusicVolume = 0.1;
-
 export class SoundManager {
   static setSoundSpecificVolume() {
-    Resources.BackgroundMusic.volume = BackgroundMusicVolume;
+    Resources.BackgroundMusic.volume = Config.BackgroundMusicVolume;
   }
 
   static init() {
@@ -87,7 +85,7 @@ export class SoundManager {
 
     // start bg music
     if (!Resources.BackgroundMusic.isPlaying()) {
-      Resources.BackgroundMusic.play(BackgroundMusicVolume);
+      Resources.BackgroundMusic.play(Config.BackgroundMusicVolume);
     }
   }
 
@@ -110,7 +108,7 @@ export class SoundManager {
     Preferences.muteBackgroundMusic = false;
 
     // unmute bg music
-    Resources.BackgroundMusic.volume = BackgroundMusicVolume;
+    Resources.BackgroundMusic.volume = Config.BackgroundMusicVolume;
 
     SoundManager._updateMusicButton();
   }
