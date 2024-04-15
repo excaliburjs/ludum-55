@@ -3,6 +3,8 @@ import { SoundConfig } from "@excaliburjs/plugin-jsfxr";
 import { AsepriteResource } from "@excaliburjs/plugin-aseprite";
 import Config from "./config";
 
+import pixelFont from './font/PressStart2P-Regular.ttf';
+
 import swordPng from "./images/template-sample-image-sword.png";
 import tilesPng from "./images/isometric-tiles.png";
 import monsterPng from "./images/monsters.png";
@@ -20,6 +22,7 @@ interface PlayableSfxrSoundConfig extends SoundConfig {
 }
 
 export const Resources = {
+  Font: new FontSource(pixelFont, "PressStart2P"),
   Sword: new ImageSource(swordPng),
   TilesSheetImage: new ImageSource(tilesPng),
   MonsterSheetImage: new ImageSource(monsterPng),

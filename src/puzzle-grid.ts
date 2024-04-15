@@ -49,12 +49,13 @@ export class PuzzleGrid {
     private columnLabels: Label[] = [];
     private rowLabels: Label[] = [];
 
-    public goalFont = new Font({
-        family: 'sans-serif',
-        size: 24,
+    public goalFont = Resources.Font.toFont({
+        size: 16,
+        family: "PressStart2P",
         unit: FontUnit.Px,
         color: Color.White,
-        textAlign: TextAlign.Center
+        textAlign: TextAlign.Center,
+        quality: 4
     });
 
     public highlight: Actor;

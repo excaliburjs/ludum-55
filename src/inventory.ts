@@ -29,7 +29,7 @@ export class Inventory extends LitElement {
                 --sprite-width: 32px;
             }
             :host {
-                font-family: sans-serif;
+                font-family: "PressStart2P", sans-serif;
             }
 
             .container {
@@ -169,7 +169,7 @@ export class Inventory extends LitElement {
                 ${Object.entries(this.counts).map(([type, count]) => count > 0 ? html`
                     <li>
                         <button .title=${'Summoned Value: ' + UnitsConfig[type as UnitType].value.toString()} @click=${this.onSelection(type as UnitType)}>
-                            <span>${UnitsConfig[type as UnitType].value.toString()} : ${type}</span>
+                            <span>${UnitsConfig[type as UnitType].value.toString()}:${type}</span>
                             ${new Array(count).fill(null).map(() => 
                                 html`<div class="unit-image ${type}"></div>`
                             )}
