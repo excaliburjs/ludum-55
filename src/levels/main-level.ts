@@ -207,6 +207,7 @@ export class Level extends Scene {
             }
         } else {
             if(!!this.currentSelection) {
+                this.checkSolution() // yes this isn't very efficient since we know this can't be a solution, but it's the fastest way to update the goal labels
                 SfxrSounds.remove.play() 
             }
             this.cancelSelection();
@@ -234,6 +235,8 @@ export class Level extends Scene {
             SfxrSounds.remove.play();
             this.inventory.addToInventory(previousUnit.config.type);
         }
+        // yes this isn't very efficient since we know this can't be a solution, but it's the fastest way to update the goal labels
+        this.checkSolution();
     };
 
     clearAllPlacedUnits() {

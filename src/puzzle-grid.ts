@@ -1,4 +1,5 @@
 import {
+    ActionSequence,
   ActionsComponent,
   Actor,
   Color,
@@ -9,6 +10,7 @@ import {
   IsometricMap,
   IsometricTile,
   Label,
+  ParallelActions,
   Random,
   Scene,
   Sprite,
@@ -73,6 +75,8 @@ export class PuzzleGrid {
     color: Color.White,
     textAlign: TextAlign.Center,
     quality: 4,
+    lineWidth: 1,
+    strokeColor: Color.Black,
   });
 
   // housekeeping data structure for lighting up the ground blocks
@@ -187,6 +191,29 @@ export class PuzzleGrid {
       scene.add(label);
       this.rowLabels.push(label);
     }
+  }
+
+  flagGoalLabelAsSolved(label: Label) {
+    label.color = Color.fromHex('37946e');
+
+    const fade = new ActionSequence(label, ctx => {
+        ctx.fade(0.5, 1000)
+    });
+
+    const vectorMagnitude = 0.15;
+    label.actions.repeatForever((repeatBuilder) => {
+      repeatBuilder
+    //   .scaleTo(new Vector(1.05, 1.05), new Vector(vectorMagnitude, vectorMagnitude))
+    //   .scaleTo(new Vector(1, 1), new Vector(vectorMagnitude, vectorMagnitude))
+      .fade(0.5, 1000)
+      .fade(1, 1000)
+    });
+  }
+
+  flagGoalLabelAsUnsolved(label: Label) {
+    label.color = Color.White;
+    label.actions.clearActions();
+    label.actions.fade(1, 250); // fading back to fully opaque because clearing actions sometimes leaves the fade partially done
   }
 
   createGroundTileFloatEffect(tile: IsometricTile) {
@@ -437,6 +464,9 @@ export class PuzzleGrid {
 
       if (rowSum !== this.goals.rows[x]) {
         solved = solved && false;
+        this.flagGoalLabelAsUnsolved(this.rowLabels[x]);
+      } else {
+        this.flagGoalLabelAsSolved(this.rowLabels[x]);
       }
     }
     for (let y = 0; y < this.dimension; y++) {
@@ -447,6 +477,9 @@ export class PuzzleGrid {
       //this.columnLabels[y].text = (this.goals.columns[y] - colSum).toString();
       if (colSum != this.goals.columns[y]) {
         solved = solved && false;
+        this.flagGoalLabelAsUnsolved(this.columnLabels[y]);
+      } else {
+        this.flagGoalLabelAsSolved(this.columnLabels[y]);
       }
     }
     return solved;
