@@ -15,6 +15,10 @@ import {
     CoordPlane,
     Vector,
     Material,
+    coroutine,
+    Animation,
+    Future,
+    AnimationStrategy,
 } from "excalibur";
 import { PuzzleGrid, ValueHintSprite } from "../puzzle-grid";
 import { Unit } from "../unit";
@@ -45,6 +49,10 @@ export class Level extends Scene {
     currentSelectedCoordinate: { x: number; y: number } = { x: 0, y: 0 };
     summoner!: Actor;
     rainbowMaterial!: Material;
+    summonerIdleAnim!: Animation;
+    summonerSummonStaffAnim!: Animation;
+    summonerStaffIdleAnim!: Animation;
+    summonerSummonUnitAnim!: Animation;
 
     constructor(private level: number = 0) {
         super();
@@ -73,13 +81,19 @@ export class Level extends Scene {
             scale: vec(2, 2),
             coordPlane: CoordPlane.Screen
         });
-        this.summoner.graphics.use(Resources.SummonerIdle.getAnimation('Idle')!);
+        this.summoner.graphics.use(Resources.Summoner.getAnimation('Idle')!);
         this.rainbowMaterial = createRainbowOutlineMaterial(engine);
         this.add(this.summoner);
 
         this.input.pointers.on("move", this.moveSelection);
         this.input.pointers.on("down", this.placeUnitWithPointer);
         this.input.keyboard.on("press", this.keyboardDown);
+
+
+        this.summonerIdleAnim = Resources.Summoner.getAnimation('Idle')!
+        this.summonerSummonStaffAnim = Resources.Summoner.getAnimation('SummonStaff')!
+        this.summonerStaffIdleAnim = Resources.Summoner.getAnimation('StaffIdle')!
+        this.summonerSummonUnitAnim = Resources.Summoner.getAnimation('SummonUnit')!
     }
 
     onActivate(context: SceneActivationContext<unknown>): void {
@@ -109,11 +123,54 @@ export class Level extends Scene {
         }
     };
 
+    playAnim = (animation: Animation, strategy: AnimationStrategy) => {
+        const future = new Future<void>();
+        animation.reset();
+        animation.strategy = strategy;
+        animation.events.on('end', () => future.resolve());
+        animation.events.on('loop', () => future.resolve());
+        this.summoner.graphics.use(animation);
+        return future.promise;
+    }
+
+    playSelectedUnitAnimation() {
+        const playAnim = this.playAnim;
+        const summoner = this.summoner;
+        const rainbowMaterial = this.rainbowMaterial;
+        const summonerIdleAnim = this.summonerIdleAnim;
+        const summonerSummonStaffAnim = this.summonerSummonStaffAnim;
+        const summonerStaffIdleAnim = this.summonerStaffIdleAnim;
+        const summonerSummonUnitAnim = this.summonerSummonUnitAnim;
+        coroutine(function * () {
+            summoner.graphics.material = rainbowMaterial;
+            yield playAnim(summonerSummonStaffAnim, AnimationStrategy.Freeze);
+            yield playAnim(summonerStaffIdleAnim, AnimationStrategy.Loop);
+        });
+    }
+
+    playPlacedUnitAnimation() {
+        const playAnim = this.playAnim;
+        const summoner = this.summoner;
+        const summonerIdleAnim = this.summonerIdleAnim;
+        const summonerSummonStaffAnim = this.summonerSummonStaffAnim.clone();
+        summonerSummonStaffAnim.reverse();
+        const summonerStaffIdleAnim = this.summonerStaffIdleAnim;
+        const summonerSummonUnitAnim = this.summonerSummonUnitAnim;
+        coroutine(function * () {
+            yield playAnim(summonerSummonUnitAnim, AnimationStrategy.Freeze);
+            summoner.graphics.material = null;
+            yield playAnim(summonerStaffIdleAnim, AnimationStrategy.Freeze);
+            yield playAnim(summonerSummonStaffAnim, AnimationStrategy.Freeze);
+            yield playAnim(summonerIdleAnim, AnimationStrategy.Loop);
+        });
+    }
+
     placeSelectionOnTile = (x: number, y: number): boolean => {
         if (this.currentSelection) {
             const unitType = this.currentSelection.config.type;
             const success = this.puzzleGrid.addUnit(this.currentSelection, x, y);
             if (success) {
+                this.playPlacedUnitAnimation();
                 this.currentSelection = null;
                 this.checkSolution();
                 const unit = this.puzzleGrid.getUnit(x, y);
@@ -154,7 +211,6 @@ export class Level extends Scene {
             }
             this.cancelSelection();
         }
-        this.summoner.graphics.material = null;
     };
 
     placeUnitWithKeyboard = () => {
@@ -166,7 +222,6 @@ export class Level extends Scene {
         }
         this.placeSelectionOnTile(this.currentSelectedCoordinate.x, this.currentSelectedCoordinate.y)
         if (!!previousUnit && !previousUnit.config.fixed) this.inventory.addToInventory(previousUnit?.config.type);
-        this.summoner.graphics.material = null;
     };
 
     clearCellWithKeyboard = () => {
@@ -302,7 +357,7 @@ export class Level extends Scene {
         unit.get(IsometricEntityComponent).elevation = 3;
         this.currentSelection = unit;
         this.add(unit);
-        this.summoner.graphics.material = this.rainbowMaterial;
+        this.playSelectedUnitAnimation();
     }
 
     cancelSelection() {
