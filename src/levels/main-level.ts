@@ -61,7 +61,6 @@ export class Level extends Scene {
         this.inventory = document.getElementsByTagName(
             "app-inventory"
         )[0]! as Inventory;
-        this.inventory.setLevel(this);
         this.summoner = new Actor({
             pos: vec(720, 300),
             scale: vec(2, 2),
@@ -75,12 +74,16 @@ export class Level extends Scene {
         this.input.pointers.on("down", this.placeUnitWithPointer);
         this.input.keyboard.on("press", this.keyboardDown);
     }
+
     onActivate(context: SceneActivationContext<unknown>): void {
         setWorldPixelConversion(this.engine);
+
+        this.inventory.setLevel(this);
         let inventory = calculateInventory(this.level, this);
         this.inventory.setInventoryConfig(inventory);
         this.inventory.toggleVisible(true);
     }
+
     onDeactivate(context: SceneActivationContext<undefined>): void {
         this.inventory.toggleVisible(false);
         this.clearAllPlacedUnits();
@@ -180,7 +183,9 @@ export class Level extends Scene {
             SfxrSounds.clearPuzzle.play();
             if (hasPuzzle(nextLevel)) {
                 const sceneKey = `level ${nextLevel}`;
-                this.engine.addScene(sceneKey, new Level(nextLevel));
+                if (!this.engine.director.getSceneInstance(sceneKey)) {
+                    this.engine.addScene(sceneKey, new Level(nextLevel));
+                }
                 this.engine.goToScene(sceneKey, {
                     destinationIn: new FadeInOut({ direction: "in", duration: 2000 }),
                     sourceOut: new FadeInOut({ direction: "out", duration: 2000 }),
