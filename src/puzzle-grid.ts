@@ -365,6 +365,7 @@ export class PuzzleGrid {
       unit.get(IsometricEntityComponent).elevation = 3;      
       tile.addChild(unit);
       this.grid[x + y * this.dimension] = unit;
+      this.events.emit('placement', tile);
       return true;
     }
     return false;
