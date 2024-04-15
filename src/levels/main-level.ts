@@ -176,6 +176,7 @@ export class Level extends Scene {
         if (!!previousUnit) {
             if (previousUnit.config.fixed) { return; }
             this.puzzleGrid.clearCell(tileX, tileY);
+            SfxrSounds.remove.play();
             this.inventory.addToInventory(previousUnit.config.type);
         }
     };
