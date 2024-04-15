@@ -163,12 +163,12 @@ export class Inventory extends LitElement {
         }
         return html`
         <div class="container" style=${styleMap(styles)}>
-            <h2>Summons</h2>
+            <h2>SumMons</h2>
             <ul>
                 ${Object.entries(this.counts).map(([type, count]) => count > 0 ? html`
                     <li>
-                        <button .title=${'Summoned Unit Value: ' + UnitsConfig[type as UnitType].value.toString()} @click=${this.onSelection(type as UnitType)}>
-                            <span>${type}</span>
+                        <button .title=${'Summoned Value: ' + UnitsConfig[type as UnitType].value.toString()} @click=${this.onSelection(type as UnitType)}>
+                            <span>${UnitsConfig[type as UnitType].value.toString()} : ${type}</span>
                             ${new Array(count).fill(null).map(() => 
                                 html`<div class="unit-image ${type}"></div>`
                             )}
