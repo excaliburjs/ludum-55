@@ -236,7 +236,12 @@ export class PuzzleGrid {
       this.hideHighlight();
     }
   }
+
+  private _lastHighlight = {x: -1, y: -1};
   showHighlightByCoordinate(x: number, y: number) {
+    if (x === this._lastHighlight.x && y === this._lastHighlight.y) {
+      return;
+    }
     if (Config.showBoardHighlights) {
       this.removeHighlightFromAllCells();
     }
@@ -252,10 +257,12 @@ export class PuzzleGrid {
       this.highlight.graphics.offset = vec(0, 32);
 
       if (Config.showBoardHighlights) {
+        this._lastHighlight = { x: tile.x, y: tile.y };
         this.highlightRowAndColumn(tile.x, tile.y);
       }
     } else {
       this.hideHighlight();
+      this._lastHighlight = { x: -1, y: -1 };
     }
   }
 
@@ -281,8 +288,8 @@ export class PuzzleGrid {
             const tileType = this.getType(rowIndex, i);
             if (tile && tileType !== 'pit') {
                 const randNumberKey = this.tileRandNumberMap.get(tile) || 0;
+                tile.clearGraphics();
                 tile.addGraphic(this.groundTiles[randNumberKey][newSpriteType]);
-                tile.removeGraphic(this.groundTiles[randNumberKey][currentSpriteType]);
             }
         }
         for (let i=0; i < this.dimension; i++) {
@@ -290,8 +297,8 @@ export class PuzzleGrid {
             const tileType = this.getType(i, columnIndex);
             if (tile && tileType !== 'pit') {
                 const randNumberKey = this.tileRandNumberMap.get(tile) || 0;
+                tile.clearGraphics();
                 tile.addGraphic(this.groundTiles[randNumberKey][newSpriteType]);
-                tile.removeGraphic(this.groundTiles[randNumberKey][currentSpriteType]);
             }
         }
     }
