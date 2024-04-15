@@ -1,6 +1,7 @@
 import { Actor, Color, Font, FontUnit, IsometricEntityComponent, IsometricMap, Label, Random, Scene, Sprite, TextAlign, Vector, toRadians, vec } from "excalibur";
 import { MonsterSpriteSheet, Resources, TilesSpriteSheet } from "./resources";
 import { Unit, UnitType } from "./unit";
+import Config from "./config";
 
 
 export interface PuzzleGridOptions {
@@ -294,6 +295,7 @@ export class PuzzleGrid {
             hint.graphics.use(ValueHintSprite['rat']); // TODO
             hint.graphics.offset = vec(0, -8);
             hint.graphics.visible = false;
+            hint.graphics.opacity = Config.valueHint.opacity;
             this.scene.add(hint);
             this.hintGrid[x + y * this.dimension] = hint;
             return true;

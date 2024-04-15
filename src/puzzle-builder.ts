@@ -12,10 +12,10 @@ function canonicalValue(val: string | number) {
 
 function calculatePuzzleGoals(puzzleIndex: number) {
     const puzzleArray = (Config.puzzles as any)[puzzleIndex].grid;
-
+    
     const solutionRows: number[] = puzzleArray.map((row: number[]) => row.reduce((a, b) => canonicalValue(a) + canonicalValue(b)));
     const solutionColumns: number[] = puzzleArray.reduce((a: number[], b: number[]) => a.map((x, i) => canonicalValue(x) + canonicalValue(b[i])));
-
+    
     return {
         columns: solutionColumns,
         rows: solutionRows,
@@ -28,13 +28,13 @@ export function hasPuzzle(puzzleIndex: number): boolean {
 function populatePuzzle(puzzleIndex: number, puzzleGrid: PuzzleGrid) {
     const puzzleArray = (Config.puzzles as any)[puzzleIndex].grid;
     console.log({puzzleArray});
-
+    
     for(let i=0; i < puzzleArray.length; i++) {
         let row = puzzleArray[i];
         for(let j=0; j < row.length; j++) {
             
             puzzleGrid.addValueHint(j, i);
-
+            
             const cellValue = row[j];
             // add enemies
             if (cellValue < 0) {
@@ -46,7 +46,8 @@ function populatePuzzle(puzzleIndex: number, puzzleGrid: PuzzleGrid) {
                     if (valueHint) {
                         valueHint.graphics.use(ValueHintSprite[unitType]);
                         unit?.actions.fade(Config.units.opacityAfterPlacement, Config.units.enemies.fadeSpeedMs).callMethod(() => {
-                          valueHint.graphics.visible = true;
+                            valueHint.graphics.visible = true;
+                            valueHint.graphics.opacity = Config.valueHint.opacity;
                         });
                     }
                 } else {
@@ -75,7 +76,7 @@ function populatePuzzle(puzzleIndex: number, puzzleGrid: PuzzleGrid) {
 
 export function calculateInventory(puzzleIndex: number, level: Level): InventoryConfig {
     const puzzleArray = (Config.puzzles as any)[puzzleIndex].grid;
-
+    
     let reverseMap: {[id:number]: UnitType} = {};
     for(let r of Object.keys(UnitsConfig)) {
         let unit = ((UnitsConfig as any)[r] as UnitConfig);
@@ -87,7 +88,7 @@ export function calculateInventory(puzzleIndex: number, level: Level): Inventory
         goblin: 0,
         rat: 0
     };
-
+    
     for(let i = 0; i < puzzleArray.length; i++){
         for(let j = 0; j < puzzleArray[i].length; j++) {
             counts[
@@ -101,7 +102,7 @@ export function calculateInventory(puzzleIndex: number, level: Level): Inventory
 export function buildPuzzle(puzzleIndex: number, level: Level): PuzzleGrid {
     console.log({puzzleIndex});
     const puzzleGoals = calculatePuzzleGoals(puzzleIndex);
-
+    
     const puzzleGrid = new PuzzleGrid(level, {
         pos: vec(400, 100),
         dimension: puzzleGoals.columns.length,
@@ -111,9 +112,8 @@ export function buildPuzzle(puzzleIndex: number, level: Level): PuzzleGrid {
             rows: puzzleGoals.columns
         }
     });
-
+    
     populatePuzzle(puzzleIndex, puzzleGrid)
-
+    
     return puzzleGrid;
 }
-  

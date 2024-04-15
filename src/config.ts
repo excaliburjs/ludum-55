@@ -4,13 +4,16 @@ export default {
     BackgroundAmbianceVolume: 0.5,
     BackgroundMusicVolume: 0.5,
 
+    valueHint:{
+        opacity: 1,
+    },
     units: {
-        opacityAfterPlacement: 0.5,
+        opacityAfterPlacement: 0.75,
         monsters: {
-            fadeSpeedMs: 250,
+            fadeSpeedMs: 1250,
         },
         enemies: {
-            fadeSpeedMs: 1250,
+            fadeSpeedMs: 2000,
         }
     },
 
