@@ -181,6 +181,9 @@ export class PuzzleGrid {
         }
     }
     showHighlightByCoordinate(x: number, y: number) {
+        if (Config.showBoardHighlights) {
+            this.removeHighlightFromAllCells();
+        }
         const tile = this.iso.getTile(x, y);
         if (tile) {
             if (this.isFixed(tile.x, tile.y)) {
@@ -191,6 +194,10 @@ export class PuzzleGrid {
             this.highlight.graphics.visible = true;
             this.highlight.pos = tile.pos;
             this.highlight.graphics.offset = vec(0, 32);
+
+            if (Config.showBoardHighlights) {
+                this.highlightRowAndColumn(tile.x, tile.y);
+            }
         } else {
             this.hideHighlight();
         }
