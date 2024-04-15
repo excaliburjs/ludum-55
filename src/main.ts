@@ -4,6 +4,7 @@ import { SoundManager } from "./sound-manager";
 import { loadPreferences } from "./preferences";
 import { Level, setWorldPixelConversion } from "./levels/main-level";
 import { StartScreen } from "./levels/start-screen";
+import Config from "./config";
 
 import "./inventory"; // lit component
 import { Inventory } from "./inventory";
@@ -20,7 +21,7 @@ const game = new Engine({
   pixelRatio: 2,
   scenes: {
     startScreen: StartScreen,
-    introLevel: new Level(0),
+    introLevel: new Level(Config.startingPuzzle),
   },
 });
 

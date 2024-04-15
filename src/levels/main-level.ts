@@ -21,6 +21,7 @@ import { Inventory } from "../inventory";
 import { buildPuzzle, calculateInventory } from "../puzzle-builder";
 import { SoundManager } from "../sound-manager";
 import { Resources, SfxrSounds } from "../resources";
+import Config from "../config";
 
 export const setWorldPixelConversion = (game: Engine) => {
     const pageOrigin = game.screen.worldToPageCoordinates(Vector.Zero);
@@ -104,7 +105,7 @@ export class Level extends Scene {
           const valueHint = this.puzzleGrid.getValueHint(x,y)
           if (valueHint) {
             valueHint.graphics.use(ValueHintSprite[unitType]);
-            unit?.actions.fade(0.4, 250).callMethod(() => {
+            unit?.actions.fade(Config.units.opacityAfterPlacement, Config.units.monsters.fadeSpeedMs).callMethod(() => {
               valueHint.graphics.visible = true;
             });
           }

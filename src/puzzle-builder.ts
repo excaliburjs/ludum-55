@@ -1,5 +1,5 @@
 import { vec } from "excalibur";
-import { PuzzleGrid } from "./puzzle-grid";
+import { PuzzleGrid, ValueHintSprite } from "./puzzle-grid";
 import { Unit, UnitConfig, UnitsConfig, UnitType, UnitNumberToUnitType } from "./unit";
 import Config from "./config";
 import { Inventory, InventoryConfig } from "./inventory";
@@ -33,14 +33,24 @@ function populatePuzzle(puzzleIndex: number, puzzleGrid: PuzzleGrid) {
             puzzleGrid.addValueHint(j, i);
 
             const cellValue = row[j];
+            // add enemies
             if (cellValue < 0) {
                 const unitType = UnitNumberToUnitType.get(cellValue);
                 if (unitType) {
-                    puzzleGrid.addUnit(new Unit({type: unitType}), j, i)
+                    const unit = new Unit({type: unitType})
+                    puzzleGrid.addUnit(unit, j, i)
+                    const valueHint = puzzleGrid.getValueHint(j,i)
+                    if (valueHint) {
+                        valueHint.graphics.use(ValueHintSprite[unitType]);
+                        unit?.actions.fade(Config.units.opacityAfterPlacement, Config.units.enemies.fadeSpeedMs).callMethod(() => {
+                          valueHint.graphics.visible = true;
+                        });
+                    }
                 } else {
                     console.error(`No unit type matches the number ${cellValue}`);
                 }
             } else if (cellValue === 0 || typeof cellValue === 'string') {
+                // add immovable terrain
                 switch(cellValue) {
                     case 'w': {
                         puzzleGrid.addUnit(new Unit({type: 'wall'}), j, i);
