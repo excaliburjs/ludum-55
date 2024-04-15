@@ -13,7 +13,7 @@ import playNowTextPng from './images/playnow.png';
 import summonerIdleAseprite from './images/SummonerSpriteStart.aseprite';
 
 import projectileMp3 from "./sounds/template-sample-sound-projectile.mp3";
-import backgroundMusicMp3 from "./sounds/background.mp3";
+import backgroundMusicMp3 from "./sounds/background_1_loopable.mp3"
 
 interface PlayableSfxrSoundConfig extends SoundConfig {
   play(): void;
