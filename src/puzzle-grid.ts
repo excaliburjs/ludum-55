@@ -236,19 +236,22 @@ export class PuzzleGrid {
     }
 
     private adjustHighlightTilesInRowAndColumn(highlightTiles: boolean, rowIndex: number, columnIndex: number) {
-        const spriteType = highlightTiles ? 'highlighted' : 'default';
+        const newSpriteType = highlightTiles ? 'highlighted' : 'default';
+        const currentSpriteType = highlightTiles ? 'default' : 'highlighted';
         for (let i=0; i < this.dimension; i++) {
             const tile = this.iso.getTile(rowIndex, i)
             if (tile) {
                 const randNumberKey = this.tileRandNumberMap.get(tile) || 0;
-                tile.addGraphic(this.groundTiles[randNumberKey][spriteType]);
+                tile.addGraphic(this.groundTiles[randNumberKey][newSpriteType]);
+                tile.removeGraphic(this.groundTiles[randNumberKey][currentSpriteType]);
             }
         }
         for (let i=0; i < this.dimension; i++) {
             const tile = this.iso.getTile(i, columnIndex)
             if (tile) {
                 const randNumberKey = this.tileRandNumberMap.get(tile) || 0;
-                tile.addGraphic(this.groundTiles[randNumberKey][spriteType]);
+                tile.addGraphic(this.groundTiles[randNumberKey][newSpriteType]);
+                tile.removeGraphic(this.groundTiles[randNumberKey][currentSpriteType]);
             }
         }
     }
