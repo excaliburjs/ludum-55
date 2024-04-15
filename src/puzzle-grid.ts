@@ -1,10 +1,10 @@
-import { Actor, Color, Font, FontUnit, IsometricEntityComponent, IsometricMap, Label, Random, Scene, Sprite, Vector, vec } from "excalibur";
+import { Actor, Color, Font, FontUnit, IsometricEntityComponent, IsometricMap, Label, Random, Scene, Sprite, TextAlign, Vector, toRadians, vec } from "excalibur";
 import { MonsterSpriteSheet, Resources, TilesSpriteSheet } from "./resources";
 import { Unit, UnitType } from "./unit";
 
 
 export interface PuzzleGridOptions {
-    pos: Vector; 
+    pos: Vector;
     dimension: number;
     goals: {
         rows: number[]; // length dimension
@@ -52,7 +52,8 @@ export class PuzzleGrid {
         family: 'sans-serif',
         size: 24,
         unit: FontUnit.Px,
-        color: Color.White
+        color: Color.White,
+        textAlign: TextAlign.Center
     });
 
     public highlight: Actor;
@@ -60,16 +61,16 @@ export class PuzzleGrid {
     constructor(private scene: Scene, options: PuzzleGridOptions) {
         this.random = new Random();
 
-        const {dimension, pos, goals} = options;
+        const { dimension, pos, goals } = options;
         this.iso = new IsometricMap({
             rows: dimension,
             columns: dimension,
             pos,
             tileWidth: 64,
-            tileHeight: 64 / 2 
+            tileHeight: 64 / 2
         });
 
-        this.groundTile =[
+        this.groundTile = [
             TilesSpriteSheet.getSprite(0, 0),
             TilesSpriteSheet.getSprite(7, 0),
             TilesSpriteSheet.getSprite(8, 0),
@@ -112,31 +113,28 @@ export class PuzzleGrid {
 
         // Draw totals
         for (let [index, columnGoal] of this.goals.columns.entries()) {
-            
-            const rightMostTile = this.iso.getTile(dimension - 1, index);
-            if (rightMostTile) {
-                const label = new Label({
-                    text: columnGoal.toString(),
-                    font: this.goalFont
-                });
-                label.pos = rightMostTile.pos.add(vec(32, 32));
-                scene.add(label);
-                this.columnLabels.push(label);
-            }
+            const pos = this.iso.tileToWorld(vec(dimension, index));
+            const label = new Label({
+                text: columnGoal.toString(),
+                font: this.goalFont,
+                z: 99
+            });
+
+            label.pos = pos.add(vec(-16, -16));
+            scene.add(label);
+            this.columnLabels.push(label);
         }
 
         for (let [index, rowGoal] of this.goals.rows.entries()) {
-            
-            const bottomMostTile = this.iso.getTile(index, dimension - 1);
-            if (bottomMostTile) {
-                const label = new Label({
-                    text: rowGoal.toString(),
-                    font: this.goalFont
-                });
-                label.pos = bottomMostTile.pos.add(vec(-32, 32));
-                scene.add(label);
-                this.rowLabels.push(label);
-            }
+            const pos = this.iso.tileToWorld(vec(index, dimension));
+            const label = new Label({
+                text: rowGoal.toString(),
+                font: this.goalFont,
+                z: 99
+            });
+            label.pos = pos.add(vec(16, -16));
+            scene.add(label);
+            this.rowLabels.push(label);
         }
     }
 
@@ -184,7 +182,7 @@ export class PuzzleGrid {
         return !!tile;
     }
 
-    getTileCoord(pos: Vector): {x: number, y: number} | null {
+    getTileCoord(pos: Vector): { x: number, y: number } | null {
         const tile = this.iso.getTileByPoint(pos.add(vec(0, 32)));
         if (tile) {
             return { x: tile.x, y: tile.y };
@@ -314,7 +312,7 @@ export class PuzzleGrid {
 
             if (rowSum !== this.goals.rows[x]) {
                 solved = solved && false;
-            } 
+            }
         }
         for (let y = 0; y < this.dimension; y++) {
             let colSum = 0;
