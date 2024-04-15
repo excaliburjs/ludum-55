@@ -1,4 +1,4 @@
-import { Actor, Color, CoordPlane, Engine, Scene, SceneActivationContext, coroutine, vec } from "excalibur";
+import { Actor, Color, CoordPlane, Engine, Scene, SceneActivationContext, Subscription, coroutine, vec } from "excalibur";
 import { Resources } from "../resources";
 import Config from "../config";
 
@@ -8,6 +8,8 @@ export class StartScreen extends Scene {
     summonCircle: Actor;
     titleText: Actor;
     playNowText: Actor;
+
+    private subscriptions: Subscription[] = [];
 
     constructor() {
         super();
@@ -73,11 +75,18 @@ export class StartScreen extends Scene {
 
     onActivate(context: SceneActivationContext<unknown>): void {
         if (!Config.skipTutorial) {
-            this.input.pointers.once('down', () => this.engine.goToScene('tutorial'));
-            this.input.keyboard.once('press', () => this.engine.goToScene('tutorial'));
+            this.subscriptions.push(this.input.pointers.once('down', () => this.engine.goToScene('tutorial')));
+            this.subscriptions.push(this.input.keyboard.once('press', () => this.engine.goToScene('tutorial')));
         } else {
-            this.input.pointers.once('down', () => this.engine.goToScene('introLevel'));
-            this.input.keyboard.once('press', () => this.engine.goToScene('introLevel'));
+            this.subscriptions.push(this.input.pointers.once('down', () => this.engine.goToScene('introLevel')));
+            this.subscriptions.push(this.input.keyboard.once('press', () => this.engine.goToScene('introLevel')));
+        }
+    }
+
+    onDeactivate(context: SceneActivationContext<undefined>): void {
+        // workaround for potential excalibur bug
+        for (let i=0; i < this.subscriptions.length; i++) {
+            this.subscriptions[i].close();
         }
     }
 
