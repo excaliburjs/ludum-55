@@ -112,6 +112,7 @@ export function buildPuzzle(puzzleIndex: number, level: Level): PuzzleGrid {
             rows: puzzleGoals.columns
         }
     });
+    puzzleGrid.puzzleTitle.text = `Level ${puzzleIndex + 1}`
     
     populatePuzzle(puzzleIndex, puzzleGrid)
     

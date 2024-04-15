@@ -3,6 +3,7 @@ import {
   ActionsComponent,
   Actor,
   Color,
+  CoordPlane,
   EasingFunctions,
   EventEmitter,
   FontUnit,
@@ -46,6 +47,7 @@ export const ValueHintSprite: Record<UnitType, Sprite> = {
 } as const;
 
 export class PuzzleGrid {
+  public puzzleTitle!: Label;
   public events = new EventEmitter();
   private random: Random;
 
@@ -79,6 +81,14 @@ export class PuzzleGrid {
     strokeColor: Color.Black,
   });
 
+  public titleFont = Resources.Font.toFont({
+    size: 16,
+    family: "PressStart2P",
+    unit: FontUnit.Px,
+    color: Color.White,
+    quality: 4,
+  });
+
   // housekeeping data structure for lighting up the ground blocks
   public tileRandNumberMap: Map<IsometricTile, number> = new Map();
 
@@ -86,6 +96,15 @@ export class PuzzleGrid {
 
   constructor(private scene: Scene, options: PuzzleGridOptions) {
     this.random = new Random();
+
+    this.puzzleTitle = new Label({
+      text: 'Tutorial',
+      font: this.titleFont,
+      coordPlane: CoordPlane.Screen,
+      pos: vec(20, 20)
+    });
+
+    scene.add(this.puzzleTitle);
 
     const { dimension, pos, goals } = options;
     this.iso = new IsometricMap({
@@ -495,5 +514,6 @@ export class PuzzleGrid {
     }
     this.rowLabels.forEach(l => this.scene.remove(l));
     this.columnLabels.forEach(c => this.scene.remove(c));
+    this.scene.remove(this.puzzleTitle);
   }
 }
