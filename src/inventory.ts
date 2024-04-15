@@ -18,7 +18,7 @@ export class Inventory extends LitElement {
         rat: 0,
         knight: 0,
         archer: 0
-    };
+    } as any;
 
     left = 0;
     top = 0;
