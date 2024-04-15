@@ -23,7 +23,7 @@ export default {
     // 'p': pit
     // 'w': gravestones (wall)
 
-    startingPuzzle: 6,
+    startingPuzzle: 0,
     puzzles: {
         // 2x2 puzzles
         0: {
