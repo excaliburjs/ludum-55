@@ -17,7 +17,7 @@ import ratIdleAseprite from './images/RatSpriteAnimated.aseprite';
 import goblinIdleAseprite from './images/GoblinSpriteWithSpearAnimated.aseprite';
 import orcIdleAseprite from './images/OrcSpriteAnimated.aseprite';
 import dragonIdleAseprite from './images/DragonSpriteAnimated.aseprite';
-import knightIdleAseprite from './images/KnightHelmentSpriteStart.aseprite';
+import knightIdleAseprite from './images/HelmetKnightSpriteAnimated.aseprite';
 import archerIdleAseprite from './images/ArcherPlusBowSpriteAnimated.aseprite';
 
 import gloveAseprite from './images/glove.aseprite';
