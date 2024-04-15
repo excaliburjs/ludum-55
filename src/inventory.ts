@@ -69,6 +69,7 @@ export class Inventory extends LitElement {
             li,button {
                 display: flex;
                 flex-grow: 1;
+                white-space: nowrap;
             }
 
             .unit-image {
