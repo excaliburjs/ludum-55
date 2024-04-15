@@ -12,6 +12,7 @@ import largeSummonCirclePng from './images/large-summon-circle.png';
 import titleTextPng from './images/sum-logo.png';
 import playNowTextPng from './images/playnow.png';
 
+import backgroundAseprite from './images/BackgroundTileAnimated.aseprite';
 import summonerAseprite from './images/SummonerSpriteAnimations_v2_1.aseprite';
 
 import ratIdleAseprite from './images/RatSpriteAnimated.aseprite';
@@ -39,6 +40,7 @@ export const Resources = {
   TitleTextImage: new ImageSource(titleTextPng),
   PlayNowImage: new ImageSource(playNowTextPng),
   Summoner: new AsepriteResource(summonerAseprite),
+  Background: new AsepriteResource(backgroundAseprite),
 
   RatIdle: new AsepriteResource(ratIdleAseprite),
   GoblinIdle: new AsepriteResource(goblinIdleAseprite),

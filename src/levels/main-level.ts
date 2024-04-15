@@ -19,6 +19,8 @@ import {
     Animation,
     Future,
     AnimationStrategy,
+    Sprite,
+    ImageWrapping,
 } from "excalibur";
 import { PuzzleGrid, ValueHintSprite } from "../puzzle-grid";
 import { Unit } from "../unit";
@@ -49,10 +51,14 @@ export class Level extends Scene {
     currentSelectedCoordinate: { x: number; y: number } = { x: 0, y: 0 };
     summoner!: Actor;
     rainbowMaterial!: Material;
+
     summonerIdleAnim!: Animation;
     summonerSummonStaffAnim!: Animation;
     summonerStaffIdleAnim!: Animation;
     summonerSummonUnitAnim!: Animation;
+
+    background: Actor;
+    backgroundAnim!: Animation;
 
     constructor(private level: number = 0) {
         super();
@@ -88,6 +94,34 @@ export class Level extends Scene {
         this.input.pointers.on("move", this.moveSelection);
         this.input.pointers.on("down", this.placeUnitWithPointer);
         this.input.keyboard.on("press", this.keyboardDown);
+
+        this.backgroundAnim = Resources.Background.getAnimation('default')!;
+        // Terrible terrible to enable animation tiling
+        for (let frame of this.backgroundAnim.frames) {
+            const sprite = (frame.graphic as Sprite);
+            sprite.image.wrapping = { x: ImageWrapping.Repeat, y: ImageWrapping.Repeat };
+            sprite.image.image.setAttribute('wrapping-x', ImageWrapping.Repeat);
+            sprite.image.image.setAttribute('wrapping-y', ImageWrapping.Repeat);
+            sprite.image.image.setAttribute('forceUpload', 'true');
+            sprite.sourceView.width *= 5;
+            sprite.sourceView.height *= 5;
+            sprite.destSize.width *= 5;
+            sprite.destSize.height *= 5;
+        }
+        this.background = new Actor({
+            name: 'background',
+            pos: vec(0, 0),
+            anchor: vec(0, 0),
+            coordPlane: CoordPlane.Screen,
+            width: 800,
+            height: 600,
+            scale: vec(2, 2),
+            z: -Infinity
+        });
+
+        this.background.graphics.opacity = .4;
+        this.background.graphics.use(this.backgroundAnim);
+        this.add(this.background);
 
 
         this.summonerIdleAnim = Resources.Summoner.getAnimation('Idle')!
