@@ -6,6 +6,9 @@ export default {
     valueHint:{
         opacity: 1,
     },
+
+    showBoardHighlights: true,
+
     units: {
         opacityAfterPlacement: 0.75,
         monsters: {

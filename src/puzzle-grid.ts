@@ -1,7 +1,7 @@
-import { Actor, Color, Font, FontUnit, IsometricEntityComponent, IsometricMap, Label, Random, Scene, Sprite, TextAlign, Vector, toRadians, vec } from "excalibur";
+import { Actor, Color, FontUnit, IsometricEntityComponent, IsometricMap, IsometricTile, Label, Random, Scene, Sprite, TextAlign, Vector, vec } from "excalibur";
+import Config from "./config";
 import { MonsterSpriteSheet, Resources, TilesSpriteSheet } from "./resources";
 import { Unit, UnitType } from "./unit";
-import Config from "./config";
 
 
 export interface PuzzleGridOptions {
@@ -12,6 +12,8 @@ export interface PuzzleGridOptions {
         columns: number[];
     }
 }
+
+type GroundTilePair = {default: Sprite, highlighted: Sprite};
 
 export const ValueHintSprite: Record<UnitType, Sprite> = {
     dragon: MonsterSpriteSheet.getSprite(3, 2),
@@ -29,7 +31,7 @@ export class PuzzleGrid {
 
     private random: Random;
 
-    private groundTile: Sprite[];
+    public groundTiles: GroundTilePair[];
     private highlightSprite: Sprite;
     private unplaceableHighlightSprite: Sprite;
 
@@ -58,6 +60,9 @@ export class PuzzleGrid {
         quality: 4
     });
 
+    // housekeeping data structure for lighting up the ground blocks
+    public tileRandNumberMap: Map<IsometricTile, number> = new Map();
+
     public highlight: Actor;
 
     constructor(private scene: Scene, options: PuzzleGridOptions) {
@@ -72,12 +77,12 @@ export class PuzzleGrid {
             tileHeight: 64 / 2
         });
 
-        this.groundTile = [
-            TilesSpriteSheet.getSprite(0, 0),
-            TilesSpriteSheet.getSprite(7, 0),
-            TilesSpriteSheet.getSprite(8, 0),
-            TilesSpriteSheet.getSprite(9, 0),
-            TilesSpriteSheet.getSprite(10, 0),
+        this.groundTiles = [
+            {default: TilesSpriteSheet.getSprite(0, 0), highlighted: TilesSpriteSheet.getSprite(0, 1)},
+            {default: TilesSpriteSheet.getSprite(7, 0), highlighted: TilesSpriteSheet.getSprite(7, 1)},
+            {default: TilesSpriteSheet.getSprite(8, 0), highlighted: TilesSpriteSheet.getSprite(8, 1)},
+            {default: TilesSpriteSheet.getSprite(9, 0), highlighted: TilesSpriteSheet.getSprite(9, 1)},
+            {default: TilesSpriteSheet.getSprite(10, 0), highlighted: TilesSpriteSheet.getSprite(10, 1)},
         ];
         this.highlightSprite = TilesSpriteSheet.getSprite(1, 0);
         this.unplaceableHighlightSprite = TilesSpriteSheet.getSprite(2, 0);
@@ -107,8 +112,9 @@ export class PuzzleGrid {
         this.hintGrid = new Array(dimension * dimension).fill(null);
 
         for (let tile of this.iso.tiles) {
-            const randGroundTileIndex = this.random.integer(0, this.groundTile.length - 1);
-            tile.addGraphic(this.groundTile[randGroundTileIndex]);
+            const randGroundTileIndex = this.random.integer(0, this.groundTiles.length - 1);
+            tile.addGraphic(this.groundTiles[randGroundTileIndex].default);
+            this.tileRandNumberMap.set(tile, randGroundTileIndex);
         }
 
         scene.add(this.iso);
@@ -154,6 +160,9 @@ export class PuzzleGrid {
     }
 
     showHighlight(pos: Vector) {
+        if (Config.showBoardHighlights) {
+            this.removeHighlightFromAllCells();
+        }
         const tile = this.iso.getTileByPoint(pos.add(vec(0, 32)));
         if (tile) {
             if (this.isFixed(tile.x, tile.y)) {
@@ -164,6 +173,9 @@ export class PuzzleGrid {
             this.highlight.graphics.visible = true;
             this.highlight.pos = tile.pos;
             this.highlight.graphics.offset = vec(0, 32);
+            if (Config.showBoardHighlights) {
+                this.highlightRowAndColumn(tile.x, tile.y);
+            }
         } else {
             this.hideHighlight();
         }
@@ -195,6 +207,35 @@ export class PuzzleGrid {
             return { x: tile.x, y: tile.y };
         }
         return null;
+    }
+
+    private adjustHighlightTilesInRowAndColumn(highlightTiles: boolean, rowIndex: number, columnIndex: number) {
+        const spriteType = highlightTiles ? 'highlighted' : 'default';
+        for (let i=0; i < this.dimension; i++) {
+            const tile = this.iso.getTile(rowIndex, i)
+            if (tile) {
+                const randNumberKey = this.tileRandNumberMap.get(tile) || 0;
+                tile.addGraphic(this.groundTiles[randNumberKey][spriteType]);
+            }
+        }
+        for (let i=0; i < this.dimension; i++) {
+            const tile = this.iso.getTile(i, columnIndex)
+            if (tile) {
+                const randNumberKey = this.tileRandNumberMap.get(tile) || 0;
+                tile.addGraphic(this.groundTiles[randNumberKey][spriteType]);
+            }
+        }
+    }
+
+    highlightRowAndColumn(rowIndex: number, columnIndex: number) {
+        this.adjustHighlightTilesInRowAndColumn(true, rowIndex, columnIndex);
+    }
+
+    removeHighlightFromAllCells() {
+        for (let i=0; i < this.dimension; i++) {
+            this.adjustHighlightTilesInRowAndColumn(false, i, 0);
+        }
+        
     }
 
     hideHighlight() {
