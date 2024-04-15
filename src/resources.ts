@@ -140,7 +140,7 @@ export const SfxrSounds: Record<TypeOfSounds, PlayableSfxrSoundConfig> = {
 export const TilesSpriteSheet = SpriteSheet.fromImageSource({
   image: Resources.TilesSheetImage,
   grid: {
-    rows: 1,
+    rows: 2,
     columns: 11,
     spriteHeight: 64,
     spriteWidth: 64,
