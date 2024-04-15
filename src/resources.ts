@@ -182,7 +182,7 @@ export const SfxrSounds: Record<TypeOfSounds, PlayableSfxrSoundConfig> = {
     p_vib_strength: 0,
     sample_rate: 44100,
     sample_size: 8,
-    sound_vol: 0.15,
+    sound_vol: Config.SoundVolume,
     wave_type: 0
   } as unknown as PlayableSfxrSoundConfig,
 } as const;

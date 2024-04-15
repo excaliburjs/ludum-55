@@ -1,7 +1,7 @@
 
 export default {
     SoundVolume: 0.05,
-    BackgroundMusicVolume: 0.5,
+    BackgroundMusicVolume: 0.25,
 
     valueHint:{
         opacity: 1,
