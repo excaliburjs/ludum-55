@@ -13,6 +13,13 @@ import titleTextPng from './images/sum-logo.png';
 import playNowTextPng from './images/playnow.png';
 
 import summonerIdleAseprite from './images/SummonerSpriteStart.aseprite';
+import ratIdleAseprite from './images/RatSpriteAnimated.aseprite';
+import goblinIdleAseprite from './images/GoblinSpriteWithSpearAnimated.aseprite';
+import orcIdleAseprite from './images/OrcSpriteAnimated.aseprite';
+import dragonIdleAseprite from './images/DragonSpriteAnimated.aseprite';
+import knightIdleAseprite from './images/KnightHelmentSpriteStart.aseprite';
+import archerIdleAseprite from './images/ArcherPlusBowSpriteAnimated.aseprite';
+
 import gloveAseprite from './images/glove.aseprite';
 
 import projectileMp3 from "./sounds/template-sample-sound-projectile.mp3";
@@ -31,6 +38,14 @@ export const Resources = {
   TitleTextImage: new ImageSource(titleTextPng),
   PlayNowImage: new ImageSource(playNowTextPng),
   SummonerIdle: new AsepriteResource(summonerIdleAseprite),
+
+  RatIdle: new AsepriteResource(ratIdleAseprite),
+  GoblinIdle: new AsepriteResource(goblinIdleAseprite),
+  OrcIdle: new AsepriteResource(orcIdleAseprite),
+  DragonIdle: new AsepriteResource(dragonIdleAseprite),
+  KnightIdle: new AsepriteResource(knightIdleAseprite),
+  ArcherIdle: new AsepriteResource(archerIdleAseprite),
+
   Glove: new AsepriteResource(gloveAseprite),
   ProjectileSound: new Sound(projectileMp3),
   BackgroundMusic: new Sound(backgroundMusicMp3),
