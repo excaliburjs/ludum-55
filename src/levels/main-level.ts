@@ -59,6 +59,8 @@ export class Level extends Scene {
 
     background!: Actor;
     backgroundAnim!: Animation;
+    summonerSummonStaffAnimReverse!: Animation;
+    summonerSummonUnitAnimReverse!: Animation;
 
     constructor(private level: number = 0) {
         super();
@@ -128,6 +130,11 @@ export class Level extends Scene {
         this.summonerSummonStaffAnim = Resources.Summoner.getAnimation('SummonStaff')!
         this.summonerStaffIdleAnim = Resources.Summoner.getAnimation('StaffIdle')!
         this.summonerSummonUnitAnim = Resources.Summoner.getAnimation('SummonUnit')!
+        this.summonerSummonStaffAnimReverse = this.summonerSummonStaffAnim.clone();
+        this.summonerSummonStaffAnimReverse.reverse();
+        this.summonerSummonUnitAnimReverse = this.summonerSummonUnitAnim.clone();
+        this.summonerSummonUnitAnimReverse.reverse();
+
     }
 
     onActivate(context: SceneActivationContext<unknown>): void {
@@ -171,10 +178,8 @@ export class Level extends Scene {
         const playAnim = this.playAnim;
         const summoner = this.summoner;
         const rainbowMaterial = this.rainbowMaterial;
-        const summonerIdleAnim = this.summonerIdleAnim;
         const summonerSummonStaffAnim = this.summonerSummonStaffAnim;
         const summonerStaffIdleAnim = this.summonerStaffIdleAnim;
-        const summonerSummonUnitAnim = this.summonerSummonUnitAnim;
         coroutine(function * () {
             summoner.graphics.material = rainbowMaterial;
             yield playAnim(summonerSummonStaffAnim, AnimationStrategy.Freeze);
@@ -186,15 +191,16 @@ export class Level extends Scene {
         const playAnim = this.playAnim;
         const summoner = this.summoner;
         const summonerIdleAnim = this.summonerIdleAnim;
-        const summonerSummonStaffAnim = this.summonerSummonStaffAnim.clone();
-        summonerSummonStaffAnim.reverse();
+        const summonerSummonStaffAnimReverse = this.summonerSummonStaffAnimReverse;
         const summonerStaffIdleAnim = this.summonerStaffIdleAnim;
         const summonerSummonUnitAnim = this.summonerSummonUnitAnim;
+        const summonerSummonUnitAnimReverse = this.summonerSummonUnitAnimReverse;
         coroutine(function * () {
             yield playAnim(summonerSummonUnitAnim, AnimationStrategy.Freeze);
+            yield playAnim(summonerSummonUnitAnimReverse, AnimationStrategy.Freeze);
             summoner.graphics.material = null;
             yield playAnim(summonerStaffIdleAnim, AnimationStrategy.Freeze);
-            yield playAnim(summonerSummonStaffAnim, AnimationStrategy.Freeze);
+            yield playAnim(summonerSummonStaffAnimReverse, AnimationStrategy.Freeze);
             yield playAnim(summonerIdleAnim, AnimationStrategy.Loop);
         });
     }
